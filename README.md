@@ -1,4 +1,4 @@
-# pt-better-beacon
+# PT-Bus-Buddy
 
  1(prio): Real time bus tracking (map with current location of buses) 
 
