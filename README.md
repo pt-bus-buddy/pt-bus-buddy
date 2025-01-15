@@ -8,7 +8,7 @@
 
  4: Real time alert (GTFS-RT: Pullman Transit API)
 
- 5: Visualize the maps
+ 5(prio): Visualize the maps
 
  6: Color code the maps
 
