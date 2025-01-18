@@ -4,6 +4,7 @@
   "description": "Backend server for PT Bus Buddy application",
   "type": "module",
   "main": "server.js",
+  "proxy": "https://localhost:5001",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
