@@ -1,40 +1,29 @@
-import express from "express";
-import axios from "axios";
-import GtfsRealtimeBindings from "gtfs-realtime-bindings";
+import protobuf from "protobufjs";
+import fetch from "node-fetch";
 
-const app = express();
-const PORT = 5001;
+// catch error
+run().catch((err) => console.log(err));
 
-app.get("/api/vehiclepositions", async (req, res) => {
-  try {
-    // Fetch GTFS-RT data
-    const response = await axios.get(
-      "https://pullmanbusbeacon.com/gtfs-rt/vehiclepositions",
-      {
-        responseType: "arraybuffer", // Important for binary data
-      },
-    );
+// function to get data
+async function run() {
+  // variables
+  const url = "https://pullmanbusbeacon.com/gtfs-rt/vehiclepositions";
 
-    // Decode the Protocol Buffers feed
-    const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
-      response.data,
-    );
+  // fetch data from url
+  // NEED to use await to make sure the promise is fulfilled
+  const response = await fetch(url);
 
-    // Extract and send vehicle positions
-    const vehiclePositions = feed.entity.map((entity) => ({
-      id: entity.id,
-      position: entity.vehicle.position,
-      trip: entity.vehicle.trip,
-      timestamp: entity.vehicle.timestamp,
-    }));
+  // convert into array buffer
+  const buffer = await response.arrayBuffer();
+  const uint8array = new Uint8Array(buffer);
 
-    res.json(vehiclePositions);
-  } catch (error) {
-    console.error("Error fetching GTFS-RT data:", error.message);
-    res.status(500).json({ error: "Failed to fetch GTFS-RT data" });
-  }
-});
+  // load in the .proto file
+  const root = await protobuf.load("./gtfs-realtime.proto");
+  //lookup feed message
+  const feedMessage = root.lookupType("transit_realtime.FeedMessage");
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+  //decode the data into an object
+  const message = feedMessage.decode(uint8array);
+
+  console.log(message);
+}
