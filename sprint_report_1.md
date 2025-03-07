@@ -2,6 +2,8 @@
 NOTE by Genevieve: we need to finalize this .md file before we submit the sprint assignment.
 
 Video Link:
+## Kanban Board Progress
+![Kanban Board Before/Early in Sprint](sprintReport1Images/before.png)
 ## What's New (User Facing)
 * NOTE by Genevieve: we will add what features we all worked on during the sprint here.
 
