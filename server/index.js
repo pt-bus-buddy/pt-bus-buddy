@@ -1,6 +1,10 @@
 import protobuf from "protobufjs";
 import fetch from "node-fetch";
 
+// used to inspect objects and return string/data we can use
+// https://www.w3schools.com/nodejs/ref_util.asp
+import util from "util";
+
 // catch error
 run().catch((err) => console.log(err));
 
@@ -39,7 +43,10 @@ async function run() {
   const realTimeMessage = message.decode(realTimeArray);
   const alertsMessage = message.decode(alertsArray);
 
-  console.log("Position Message: ", positionMessage);
+  console.log("Position Message: ");
+  console.log(util.inspect(positionMessage, { depth: null, colors: true }));
   console.log("Real Time Message: ", realTimeMessage);
+  console.log(util.inspect(realTimeMessage, { depth: null, colors: true }));
   console.log("Alerts Messages: ", alertsMessage);
+  console.log(util.inspect(alertsMessage, { depth: null, colors: true }));
 }
