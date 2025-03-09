@@ -1,5 +1,6 @@
 import protobuf from "protobufjs";
 import fetch from "node-fetch";
+import fs from "fs";
 
 // used to inspect objects and return string/data we can use
 // https://www.w3schools.com/nodejs/ref_util.asp
@@ -43,6 +44,38 @@ async function run() {
   const realTimeMessage = message.decode(realTimeArray);
   const alertsMessage = message.decode(alertsArray);
 
+  // json stringify
+  const positionJSON = JSON.stringify(positionMessage);
+  const realTimeJSON = JSON.stringify(realTimeMessage);
+  const alertsJSON = JSON.stringify(alertsMessage);
+
+  // write it to position json file
+  fs.writeFile("./position-data.json", positionJSON, (err) => {
+    if (err) {
+      console.error("Error writing positionJSON to file", err);
+    } else {
+      console.log("File written successfully");
+    }
+  });
+
+  // write it to real time json file
+  fs.writeFile("./real-data.json", realTimeJSON, (err) => {
+    if (err) {
+      console.error("Error writing positionJSON to file", err);
+    } else {
+      console.log("File written successfully");
+    }
+  });
+
+  // write it to alerts json file
+  fs.writeFile("./alerts-data.json", alertsJSON, (err) => {
+    if (err) {
+      console.error("Error writing positionJSON to file", err);
+    } else {
+      console.log("File written successfully");
+    }
+  });
+  // debugging purposes: printing it out on console
   console.log("Position Message: ");
   console.log(util.inspect(positionMessage, { depth: null, colors: true }));
   console.log("Real Time Message: ", realTimeMessage);
