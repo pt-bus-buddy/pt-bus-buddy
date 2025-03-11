@@ -5,9 +5,6 @@ import fetch from "node-fetch";
 // https://www.w3schools.com/nodejs/ref_util.asp
 import util from "util";
 
-// catch error
-run().catch((err) => console.log(err));
-
 // function to get data
 export async function fetchAllDatasets() {
   // variables
