@@ -1,6 +1,5 @@
 import { fetchAllDatasets } from "./fetchData.js";
-import { processData } from "./processData.js";
-import { writeData } from "./writeData.js";
+import { connectData } from "./connectData.js";
 // catch error
 run().catch((err) => console.log(err));
 
@@ -9,7 +8,6 @@ async function run() {
   // fetch the data sets
   const { positions, realTime, alerts } = await fetchAllDatasets();
 
-  processData(positions);
-
-  // writeData(positions);
+  // connect it with web sockets
+  connectData(positions);
 }
