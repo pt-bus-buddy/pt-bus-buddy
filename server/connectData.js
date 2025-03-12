@@ -25,6 +25,7 @@ export async function connectData(busPositions) {
   */
 
   // debug: print out
+  /*
   busPositions.entity.forEach((bus, index) => {
     console.log(`Bus ${index + 1}: `, bus.vehicle.vehicle.id);
     console.log(
@@ -36,6 +37,7 @@ export async function connectData(busPositions) {
       bus.vehicle.position.longitude,
     );
   });
+  */
 
   io.on("connection", (socket) => {
     console.log("Client connected");
@@ -49,6 +51,8 @@ export async function connectData(busPositions) {
           position: {
             latitude: bus.vehicle.position.latitude,
             longitude: bus.vehicle.position.longitude,
+            speed: bus.vehicle.position.speed,
+            bearing: bus.vehicle.position.bearing,
           },
         })),
       );
