@@ -16,19 +16,20 @@
     "dotenv": "^16.4.7",
     "expo": "~52.0.25",
     "expo-dev-client": "^5.0.14",
+    "expo-location": "~18.0.7",
     "expo-status-bar": "~2.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "0.76.7",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-maps": "^1.18.0",
-    "react-native-web": "~0.19.13",
-    "expo-location": "~18.0.7"
+    "react-native-paper": "^5.13.1",
+    "react-native-web": "~0.19.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "typescript": "^5.3.3",
-    "@types/react": "~18.3.12"
+    "@types/react": "~18.3.12",
+    "typescript": "^5.3.3"
   },
   "private": true
 }
