@@ -5,11 +5,13 @@ Video Link:
 ## Kanban Board Progress
 Kanban board before Sprint 1:
 ![Kanban Board Before/Early in Sprint](sprintReport1Images/before.png)
+Kanban board during Sprint 1:
+![Kanban Board During/Mid Sprint](sprintReport1Images/middleofsprint.png)
 ## What's New (User Facing)
-* NOTE by Genevieve: we will add what features we all worked on during the sprint here.
+* User is able to view the map of Pullman via the Google maps API and can see thier location as long as location services are turned on.
 
 * Completed by Darron -> (#013): Route Display: Allow users to view all bus information
-* Completed by Genevieve -> 
+* Completed by Genevieve -> (#001) Map Display: Allows user to view the main base map of Pullman and see thier location, (#022) Pullman Transit API: Read PT documentation and figure out what information is provided via the api
 * Feature 2 or Bug Fix 2
 * Feature n or Bug Fix n
 ## Work Summary (Developer Facing)
@@ -33,8 +35,8 @@ that it can be addressed later.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
-* URL of issue 1
-* URL of issue 2
+* [URL of issue 22](https://github.com/darronese/pt-bus-buddy/issues/22)
+* [URL of issue 1](https://github.com/darronese/pt-bus-buddy/issues/1)
 * URL of issue n
 Desirables (Remove this section when you save the file):
 * Each issue should be assigned to a milestone
@@ -71,5 +73,5 @@ Here's what we'd like to improve:
 * Item 2
 * Item x
 Here are changes we plan to implement in the next sprint:
-* Item 1
+* Error handling for user location services not being turned on
 * Item 2
