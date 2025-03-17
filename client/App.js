@@ -1,15 +1,3 @@
-<<<<<<< Updated upstream
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-=======
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Menu, Divider, Button, Provider } from 'react-native-paper';
@@ -18,7 +6,7 @@ import * as Location from 'expo-location';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SchedulesScreen from './SchedulesScreen';
-import toggleBusLocations from './ShowBusToggle'; // Import the toggle function
+import toggleBusLocations from './ShowBusToggle';
 
 const Stack = createStackNavigator();
 
@@ -97,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
                         <Divider />
                         <Menu.Item
                             onPress={() => toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible)}
-                            title={showBuses ? "Hide All Buses" : "Show All Buses"} // Toggle shows correct label
+                            title={showBuses ? "Hide All Buses" : "Show All Buses"}
                             titleStyle={{ color: 'white' }}
                         />
                     </Menu>
@@ -116,20 +104,11 @@ export default function App() {
             </Stack.Navigator>
         </NavigationContainer>
     );
->>>>>>> Stashed changes
 }
 
+// Styles
 const styles = StyleSheet.create({
-<<<<<<< Updated upstream
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-=======
     container: { flex: 1 },
     map: { width: '100%', height: '100%' },
     menuContainer: { position: 'absolute', top: 40, right: 20 },
->>>>>>> Stashed changes
 });
