@@ -10,7 +10,7 @@ export const getBusList = (busData, stopId, routeShape, averageSpeedKmh) => {
 
  // Use the calculateEstimatedArrivalTime function for each bus
    const estimatedBuses = busesAtStop.map((bus) => {
-   const estimatedArrival = calculateEstimatedArrivalTime(
+   const {estimatedMinutes, arrivalTime} = calculateEstimatedArrivalTime(
      bus.location, // Current bus location
      routeShape, // Full route shape
      stopId, // Target stop
