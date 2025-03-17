@@ -3,16 +3,16 @@
 
 
 // generates a list of all buses and their arrival times
-export const getBusList = (busData, stopId, routeShapes, averageSpeedKmh) => {
+export const getBusList = (busData, stopId, routeName) => {
 
  // Filter buses passing through the selected stop
- const busesAtStop = busData.filter((bus) => bus.stops.includes(stopId));
+ const busesAtStop = busData.filter((bus) => routeName == bus.routeName);
 
  // Use the calculateEstimatedArrivalTime function for each bus
    const estimatedBuses = busesAtStop.map((bus) => {
-   const {estimatedMinutes, arrivalTime} = calculateEstimatedArrivalTime(
+   const {estimatedMinutes, arrivalTime} = calculateEstimatedArrival(
      bus.location, // Current bus location
-     routeShapes, // Full route shape
+     bus.routeShape, // Full route shape
      stopId, // Target stop
      bus.averageSpeedKmh // Average bus speed for each bus
    );
@@ -35,9 +35,9 @@ return estimatedBuses;
 
 
 // calculate estimated arrival time of one bus
-export const calculateEstimatedArrival = (busLocation, routeShapes, targetStop, averageSpeedKmh) => {
+export const calculateEstimatedArrival = (busLocation, routeShape, targetStop, averageSpeedKmh) => {
    
-    const routeShape = routeShapes[busLocation.route];
+   
     let remainingDistance = 0;
     let busReachedStop = false;
 
@@ -98,7 +98,7 @@ export const calculateEstimatedArrival = (busLocation, routeShapes, targetStop, 
   }
 
   
-  export const haversine = (lat1, lon1, lat2, lon2) => {
+  const haversine = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of Earth in kilometers
   const toRadians = (degree) => (degree * Math.PI) / 180;
 

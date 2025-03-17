@@ -1,6 +1,7 @@
 {
   "name": "client",
   "version": "1.0.0",
+  "type" : "module",
   "main": "index.js",
   "proxy": "https://localhost:5002",
   "scripts": {
@@ -19,5 +20,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true 
+  
 }
