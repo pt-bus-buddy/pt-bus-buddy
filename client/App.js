@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SchedulesScreen from './SchedulesScreen';
 import toggleBusLocations from './ShowBusToggle';
 
+
 const Stack = createStackNavigator();
 
 const HomeScreen = ({ navigation }) => {
@@ -104,6 +105,7 @@ export default function App() {
             </Stack.Navigator>
         </NavigationContainer>
     );
+
 }
 
 // Styles
@@ -111,4 +113,5 @@ const styles = StyleSheet.create({
     container: { flex: 1 },
     map: { width: '100%', height: '100%' },
     menuContainer: { position: 'absolute', top: 40, right: 20 },
+
 });
