@@ -12,6 +12,7 @@ Kanban board during Sprint 1:
 
 * Completed by Darron -> (#013): Route Display: Allow users to view all bus information
 * Completed by Genevieve -> (#001) Map Display: Allows user to view the main base map of Pullman and see thier location, (#022) Pullman Transit API: Read PT documentation and figure out what information is provided via the api
+* Completed by Joanne -> (#020): Schedules Page: Allow users to navigate to the schedules page where bus schedules are displayed.
 * Feature 2 or Bug Fix 2
 * Feature n or Bug Fix n
 ## Work Summary (Developer Facing)
@@ -37,6 +38,7 @@ that it can be addressed later.
 Here are links to the issues that we completed in this sprint:
 * [URL of issue 22](https://github.com/darronese/pt-bus-buddy/issues/22)
 * [URL of issue 1](https://github.com/darronese/pt-bus-buddy/issues/1)
+* [URL of issue 20](https://github.com/pt-bus-buddy/pt-bus-buddy/issues/20)
 * URL of issue n
 Desirables (Remove this section when you save the file):
 * Each issue should be assigned to a milestone
