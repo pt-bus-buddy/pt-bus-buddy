@@ -14,7 +14,7 @@ export const getBusList = (busData, stopId, routeShapes, averageSpeedKmh) => {
      bus.location, // Current bus location
      routeShapes, // Full route shape
      stopId, // Target stop
-     averageSpeedKmh // Average bus speed
+     bus.averageSpeedKmh // Average bus speed for each bus
    );
 
    return {
