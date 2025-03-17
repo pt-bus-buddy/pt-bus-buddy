@@ -3,7 +3,7 @@
 
 
 // generates a list of all buses and their arrival times
-export const getBusList = (busData, stopId, routeShape, averageSpeedKmh) => {
+export const getBusList = (busData, stopId, routeShapes, averageSpeedKmh) => {
 
  // Filter buses passing through the selected stop
  const busesAtStop = busData.filter((bus) => bus.stops.includes(stopId));
@@ -12,7 +12,7 @@ export const getBusList = (busData, stopId, routeShape, averageSpeedKmh) => {
    const estimatedBuses = busesAtStop.map((bus) => {
    const {estimatedMinutes, arrivalTime} = calculateEstimatedArrivalTime(
      bus.location, // Current bus location
-     routeShape, // Full route shape
+     routeShapes, // Full route shape
      stopId, // Target stop
      averageSpeedKmh // Average bus speed
    );
@@ -35,9 +35,11 @@ return estimatedBuses;
 
 
 // calculate estimated arrival time of one bus
-export const calculateEstimatedArrival = (busLocation, routeShape, targetStop, averageSpeedKmh) => {
+export const calculateEstimatedArrival = (busLocation, routeShapes, targetStop, averageSpeedKmh) => {
+   
+    const routeShape = routeShapes[busLocation.route];
     let remainingDistance = 0;
-  let busReachedStop = false;
+    let busReachedStop = false;
 
   for (let i = 0; i < routeShape.length - 1; i++) {
     const start = routeShape[i];
