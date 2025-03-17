@@ -12,6 +12,9 @@
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
     "@expo/ngrok": "^4.1.0",
+    "@react-native-community/cli": "^18.0.0",
+    "@react-navigation/native": "^7.0.15",
+    "@react-navigation/stack": "^7.1.2",
     "@vis.gl/react-google-maps": "^1.5.1",
     "dotenv": "^16.4.7",
     "expo": "~52.0.25",
@@ -21,10 +24,15 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "0.76.7",
+    "react-native-fs": "^2.20.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-maps": "^1.18.0",
     "react-native-paper": "^5.13.1",
-    "react-native-web": "~0.19.13"
+    "react-native-pdf": "^6.7.7",
+    "react-native-pdf-viewer": "^0.1.1",
+    "react-native-web": "~0.19.13",
+    "react-native-webview": "^13.13.4",
+    "react-navigation": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
