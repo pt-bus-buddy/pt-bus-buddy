@@ -66,16 +66,19 @@ sprint, for quality:
 * [Name of code file 2](https://github.com/your_repo/file_extension)
 * [Name of code file 3](https://github.com/your_repo/file_extension)
 ## Retrospective Summary
-Here's what went well:
-* Item 1
-* Item 2
-* Item x
-Here's what we'd like to improve:
-* Item 1
-* Item 2
-* Item x
-Here are changes we plan to implement in the next sprint:
+**Here's what went well:**
+*everybody was able to get their assigned tasks done on time without meeting in person, due to spring break
+*we made lots of progress on the app
+**Here's what we'd like to improve:**
+*the communication, as it was hard to get everybody on the same page Since we were all away, we had to communicate through messages, which was difficult since a lot of us were traveling. Some of us weren’t even in the same time zone!
+*more time to meeting in person and discussing topics and what we are able to work on.
+*manage more of the workload and be better productively
+**Here are changes we plan to implement in the next sprint:**
 * Error handling for user location services not being turned on
-* Item 2
+*Schedule regular check-ins - By setting up a mandatory virtual check-in, we can all talk about the progress we have made and to make sure everybody is on the right track. This could also help us understand what our teammates are working on to ensure maximum productivity.
+*Use a more scheduled communication tool - By setting up a more scheduled communication tool like Trello, we would be able to help everybody get on board and stay focused on their tasks. This would be extremely beneficial for someone who has to travel. They would still be able to communicate and work on their task!
+*Plan ahead for absences - Before busy breaks or weekends, we can plan the task distribution accordingly. We can assign responsibilities early and have them complete the task before a busy break or weekend to ensure that the work is done and there is no need for future clarification.
+*Extensive meeting at the beggining of each sprint
+
   ## Retrospective Report
   Overall, our sprint 1 was successful. We were able to make significant progress on the app, implementing  a list of key features such as parsing the API data (Darron), Prompting for user location and displaying an accurate/scalable Map (Genevieve), adding a bus schedule page with accurate bus schedules (Joanne), adding static map markers at each of the bus stops (Collin), and using bus data to estimate arrival times of busses at each stop (Riley). Each of these are high priority features that are crucial to the core functionality of the app. Our team found it helpful to work on the high priority items, because most other features depend on certain core features of the app to work. For future sprints, we need to take the time to better understand the directions, and discuss our team’s vision for what the app/features will look like before starting the sprint. We also need better communication as to who is assigned to which task, and to hash out any potential issues where certain features rely on the completion of other features. To improve our sprint process, our team decided to have virtual meetings where each person discusses their progress on a feature or any potential problems. We can use a concrete scheduling app such as trello in order to coordinate times and ensure everyone can make them. We will also assign tasks earlier on in the sprint (or before breaks/weekends) so that everyone knows what they need to work on. Lastly, we will have a meeting at the start of each sprint to go over the directions (deliverables) of the sprint, our team’s overall vision for the app (what will the app look like by the end of the sprint), and assign tasks to each person (discuss which features rely on other features vs which features can be worked on independently). This will also help us to get a head start on the sprint, and stay on top of the time frame which we have to complete the sprint.
