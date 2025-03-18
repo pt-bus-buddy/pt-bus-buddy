@@ -74,9 +74,7 @@ sprint, for quality:
 **Here's what we'd like to improve:**
 
 *the communication, as it was hard to get everybody on the same page Since we were all away, we had to communicate through messages, which was difficult since a lot of us were traveling. Some of us weren’t even in the same time zone!
-
 *more time to meeting in person and discussing topics and what we are able to work on.
-
 *manage more of the workload and be better productively
 
 **Here are changes we plan to implement in the next sprint:**
