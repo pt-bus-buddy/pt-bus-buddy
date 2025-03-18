@@ -18,6 +18,7 @@ Kanban board after Sprint 1:
 * Completed by Genevieve -> (#001) Map Display: Allows user to view the main base map of Pullman and see thier location, (#022) Pullman Transit API: Read PT documentation and figure out what information is provided via the api
 * Completed by Joanne -> (#020): Schedules Page: Allow users to navigate to the schedules page where bus schedules are displayed.
 * Completed by Collin -> (#018): Show Bus Locations Toggle: Allow users to toggle on/off all bus locations.
+* Completed by Riley -> (#014): Calculate and Display the estimated arrival time of the buses.
 
 ## Work Summary (Developer Facing)
 This sprint, our team focused on establishing the foundational structure of the app while integrating key transit features. We tackled the challenge of parsing data from the Pullman Transit API, ensuring accurate retrieval and processing of bus information. Implementing the Google Maps API required overcoming issues related to displaying dynamic transit data, particularly aligning real-time updates with static schedule information. We developed a basis for the user interface of the app, incorporating a menu that provides location tracking and bus schedule access. A significant learning moment came from synchronizing estimated bus arrival times with map rendering.
