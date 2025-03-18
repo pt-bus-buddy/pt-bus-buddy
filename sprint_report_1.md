@@ -82,8 +82,7 @@ sprint, for quality:
 *Error handling for user location services not being turned on  
 *Schedule regular check-ins - By setting up a mandatory virtual check-in, we can all talk about the progress we have made and to make sure everybody is on the right track. This could also help us understand what our teammates are working on to ensure maximum productivity  
 *Use a more scheduled communication tool - By setting up a more scheduled communication tool like Trello, we would be able to help everybody get on board and stay focused on their tasks. This would be extremely beneficial for someone who has to travel. They would still be able to communicate and work on their task!  
-*Plan ahead for absences - Before busy breaks or weekends, we can plan the task distribution accordingly. We can assign responsibilities early and have them complete the task before a busy break or weekend to ensure that the work is done and there is no need for future clarification
-
+*Plan ahead for absences - Before busy breaks or weekends, we can plan the task distribution accordingly. We can assign responsibilities early and have them complete the task before a busy break or weekend to ensure that the work is done and there is no need for future clarification  
 *Extensive meeting at the beggining of each sprint
 
   ## Retrospective Report
