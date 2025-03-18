@@ -7,6 +7,10 @@ Kanban board before Sprint 1:
 ![Kanban Board Before/Early in Sprint](sprintReport1Images/before.png)
 Kanban board during Sprint 1:
 ![Kanban Board During/Mid Sprint](sprintReport1Images/middleofsprint.png)
+
+Kanban board after Sprint 1:
+![Kanban Board After Sprint](sprintReport1Images/afterSprint.png)
+
 ## What's New (User Facing)
 * User is able to view the map of Pullman via the Google maps API and can see thier location and bus locations as long as location services are turned on. Additionally, users can now see bus schedules in the 'Schedules' tab.
 
@@ -14,25 +18,12 @@ Kanban board during Sprint 1:
 * Completed by Genevieve -> (#001) Map Display: Allows user to view the main base map of Pullman and see thier location, (#022) Pullman Transit API: Read PT documentation and figure out what information is provided via the api
 * Completed by Joanne -> (#020): Schedules Page: Allow users to navigate to the schedules page where bus schedules are displayed.
 * Completed by Collin -> (#018): Show Bus Locations Toggle: Allow users to toggle on/off all bus locations.
-* Feature n or Bug Fix n
+
 ## Work Summary (Developer Facing)
-NOTE by Genevieve: we will do this when the sprint is over.
+This sprint, our team focused on establishing the foundational structure of the app while integrating key transit features. We tackled the challenge of parsing data from the Pullman Transit API, ensuring accurate retrieval and processing of bus information. Implementing the Google Maps API required overcoming issues related to displaying dynamic transit data, particularly aligning real-time updates with static schedule information. We developed a basis for the user interface of the app, incorporating a menu that provides location tracking and bus schedule access. A significant learning moment came from synchronizing estimated bus arrival times with map rendering.
 
-Provide a one paragraph synposis of what your team accomplished this sprint. Don't
-repeat the "What's New" list of features. Instead, help the instructor understand
-how you went about the work described there, any barriers you overcame, and any
-significant learnings for your team.
 ## Unfinished Work
-NOTE by Genevieve: we will probably have a lot to put here since we have 20+ issues and all of our project issues were added to this first sprint. Do
-this after the inital sprint 1.
-
-If applicable, explain the work you did not finish in this sprint. For issues/user
-stories in the current sprint that have not been closed, (a) any progress toward
-completion of the issues has been clearly tracked (by checking the checkboxes of
-acceptance criteria), (b) a comment has been added to the issue to explain why the
-issue could not be completed (e.g., "we ran out of time" or "we did not anticipate
-it would be so much work"), and (c) the issue is added to a subsequent sprint, so
-that it can be addressed later.
+For the initial Kanban board setup, we ensured that all project issues were organized in the To Do column, allowing us to complete them in successive sprints. Our approach prioritized major tasks rather than spreading our efforts too thin across multiple smaller issues. However, we ran out of time for some tasks in the In Progress section because we initially took on more issues than we could realistically complete within this sprint. Moving forward, we will refine our planning process to better estimate workload capacity and improve task distribution across sprints.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
@@ -48,23 +39,16 @@ Desirables (Remove this section when you save the file):
 GitHub
 * Each issue should be assigned story points using a label
 * Story points contribution of each team member should be indicated in a comment
+  
 ## Incomplete Issues/User Stories
-Here are links to issues we worked on but did not complete in this sprint:
-* URL of issue 1 <<One sentence explanation of why issue was not completed>>
-* URL of issue 2 <<One sentence explanation of why issue was not completed>>
-* URL of issue n <<One sentence explanation of why issue was not completed>>
-Examples of explanations (Remove this section when you save the file):
-* "We ran into a complication we did not anticipate (explain briefly)."
-* "We decided that the feature did not add sufficient value for us to work on it
-in this sprint (explain briefly)."
-* "We could not reproduce the bug" (explain briefly).
-* "We did not get to this issue because..." (explain briefly)
+We do not have any issues that we are working on that we didn't complete in this sprint. Any open issues were closed at the time of writing this sprint report.
+
 ## Code Files for Review
 Please review the following code files, which were actively developed during this
 sprint, for quality:
-* [Name of code file 1](https://github.com/your_repo/file_extension)
-* [Name of code file 2](https://github.com/your_repo/file_extension)
-* [Name of code file 3](https://github.com/your_repo/file_extension)
+* [Client side link: All code files with a .js extension were actively developed](https://github.com/pt-bus-buddy/pt-bus-buddy/tree/main/client)
+* [Server side link: All code files with a .js extension were actively developed](https://github.com/pt-bus-buddy/pt-bus-buddy/tree/main/server)
+  
 ## Retrospective Summary
 **Here's what went well:**
 
