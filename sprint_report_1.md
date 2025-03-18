@@ -1,7 +1,7 @@
 # Sprint 1 Report
-NOTE by Genevieve: we need to finalize this .md file before we submit the sprint assignment.
 
-Video Link:
+Video Link: https://www.youtube.com/watch?v=zYhf_t1fp4s
+
 ## Kanban Board Progress
 Kanban board before Sprint 1:
 ![Kanban Board Before/Early in Sprint](sprintReport1Images/before.png)
