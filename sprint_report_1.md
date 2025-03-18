@@ -8,12 +8,12 @@ Kanban board before Sprint 1:
 Kanban board during Sprint 1:
 ![Kanban Board During/Mid Sprint](sprintReport1Images/middleofsprint.png)
 ## What's New (User Facing)
-* User is able to view the map of Pullman via the Google maps API and can see thier location as long as location services are turned on.
+* User is able to view the map of Pullman via the Google maps API and can see thier location and bus locations as long as location services are turned on. Additionally, users can now see bus schedules in the 'Schedules' tab.
 
 * Completed by Darron -> (#013): Route Display: Allow users to view all bus information
 * Completed by Genevieve -> (#001) Map Display: Allows user to view the main base map of Pullman and see thier location, (#022) Pullman Transit API: Read PT documentation and figure out what information is provided via the api
 * Completed by Joanne -> (#020): Schedules Page: Allow users to navigate to the schedules page where bus schedules are displayed.
-* Feature 2 or Bug Fix 2
+* Completed by Collin -> (#018): Show Bus Locations Toggle: Allow users to toggle on/off all bus locations.
 * Feature n or Bug Fix n
 ## Work Summary (Developer Facing)
 NOTE by Genevieve: we will do this when the sprint is over.
@@ -39,12 +39,12 @@ Here are links to the issues that we completed in this sprint:
 * [URL of issue 22](https://github.com/darronese/pt-bus-buddy/issues/22)
 * [URL of issue 1](https://github.com/darronese/pt-bus-buddy/issues/1)
 * [URL of issue 20](https://github.com/pt-bus-buddy/pt-bus-buddy/issues/20)
-* URL of issue n
+* [URL of issue 18](https://github.com/pt-bus-buddy/pt-bus-buddy/issues/18)
 Desirables (Remove this section when you save the file):
-* Each issue should be assigned to a milestone
-* Each completed issue should be assigned to a pull request
+* FINISHED - Each issue should be assigned to a milestone
+* FINISHED - Each completed issue should be assigned to a pull request
 * Each completed pull request should include a link to a "Before and After" video
-* All team members who contributed to the issue should be assigned to it on
+* FINISHED - All team members who contributed to the issue should be assigned to it on
 GitHub
 * Each issue should be assigned story points using a label
 * Story points contribution of each team member should be indicated in a comment
