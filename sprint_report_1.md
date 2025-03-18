@@ -69,7 +69,6 @@ sprint, for quality:
 **Here's what went well:**
 
 *everybody was able to get their assigned tasks done on time without meeting in person, due to spring break
-
 *we made lots of progress on the app
 
 **Here's what we'd like to improve:**
