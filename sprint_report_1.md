@@ -69,12 +69,14 @@ sprint, for quality:
 **Here's what went well:**
 *everybody was able to get their assigned tasks done on time without meeting in person, due to spring break
 *we made lots of progress on the app
+
 **Here's what we'd like to improve:**
+
 *the communication, as it was hard to get everybody on the same page Since we were all away, we had to communicate through messages, which was difficult since a lot of us were traveling. Some of us weren’t even in the same time zone!
 *more time to meeting in person and discussing topics and what we are able to work on.
 *manage more of the workload and be better productively
 **Here are changes we plan to implement in the next sprint:**
-* Error handling for user location services not being turned on
+*Error handling for user location services not being turned on
 *Schedule regular check-ins - By setting up a mandatory virtual check-in, we can all talk about the progress we have made and to make sure everybody is on the right track. This could also help us understand what our teammates are working on to ensure maximum productivity.
 *Use a more scheduled communication tool - By setting up a more scheduled communication tool like Trello, we would be able to help everybody get on board and stay focused on their tasks. This would be extremely beneficial for someone who has to travel. They would still be able to communicate and work on their task!
 *Plan ahead for absences - Before busy breaks or weekends, we can plan the task distribution accordingly. We can assign responsibilities early and have them complete the task before a busy break or weekend to ensure that the work is done and there is no need for future clarification.
