@@ -2,7 +2,7 @@
 Video Link:
 
 ## What's New (User Facing)
-* Feature 1 or Bug Fix 1
+* (#023) Assigned to: Genevieve - Add Ability to View List of Routes From Dropdown Menu
 * Feature 2 or Bug Fix 2
 * Feature n or Bug Fix n
 
@@ -23,7 +23,7 @@ that it can be addressed later.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
-* URL of issue 1
+* [Link to issue 23](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102922992&issue=pt-bus-buddy%7Cpt-bus-buddy%7C30)
 * URL of issue 2
 * URL of issue n
 
