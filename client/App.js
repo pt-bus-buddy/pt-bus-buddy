@@ -12,11 +12,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const Stack = createStackNavigator();
 
 const HomeScreen = ({ navigation }) => {
-    const [userLocation, setUserLocation] = useState(null);
-    const [menuVisible, setMenuVisible] = useState(false);
-    const [busLocations, setBusLocations] = useState([]);
+    const [userLocation, setUserLocation] = useState(null); // for User's location beacon
+    const [menuVisible, setMenuVisible] = useState(false); // state object for menu visibility
+    const [busLocations, setBusLocations] = useState([]);  
     const [showBuses, setShowBuses] = useState(false);
-    const [routeDialogVisible, displayRouteMenuPopup] = useState(false);
+    const [routeDialogVisible, displayRouteMenuPopup] = useState(false); // dictates whether the routes popup to visible or not
     const [selectedRoute, setSelectedRoute] = useState(null); // use this useState to filter the map display by bus route
 
     const mapRef = useRef(null);
@@ -180,7 +180,7 @@ const HomeScreen = ({ navigation }) => {
     );
 };
 
-// Main app function. Switches between the listed Stack.Screen objects
+// Main app function. The navigator switches between the listed Stack.Screen objects
 export default function App() {
     return (
         <NavigationContainer>
@@ -192,6 +192,8 @@ export default function App() {
     );
 }
 
+// Style parameters for the map, menu button/container, and buttons for each of the bus routes in the filtering 
+// feature
 const styles = StyleSheet.create({
     container: { flex: 1 },
     map: { width: '100%', height: '100%' },
