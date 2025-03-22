@@ -58,6 +58,9 @@ export async function connectData(busPositions) {
       );
       // every 5 seconds it updates
     }, 5000);
+    socket.on("disconnect", () => {
+      console.log("Client disconnected!");
+    });
   });
 }
 

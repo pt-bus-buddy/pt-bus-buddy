@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "1.0.0",
-  "type" : "module",
+  "type": "module",
   "main": "index.js",
   "proxy": "https://localhost:5002",
   "scripts": {
@@ -33,13 +33,13 @@
     "react-native-pdf-viewer": "^0.1.1",
     "react-native-web": "~0.19.13",
     "react-native-webview": "^13.13.4",
-    "react-navigation": "^5.0.0"
+    "react-navigation": "^5.0.0",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.3.12",
     "typescript": "^5.3.3"
   },
-  "private": true 
-  
+  "private": true
 }

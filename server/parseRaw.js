@@ -1,7 +1,5 @@
 import { io } from "socket.io-client";
 
-// PROCESS:
-// Get the positions AND the calculated time of arrival per stop
 // our server from the back end
 const server = io("http://localhost:3000");
 
