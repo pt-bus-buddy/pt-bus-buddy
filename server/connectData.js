@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import http from "http";
+import { processRaw } from "./calculate.js";
 
 // http server
 const server = http.createServer();
