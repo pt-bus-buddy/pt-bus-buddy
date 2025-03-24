@@ -53,6 +53,7 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
+    
     return (
         <Provider>
             <View style={styles.container}>
@@ -85,7 +86,19 @@ const HomeScreen = ({ navigation }) => {
                         }} title="Schedules" titleStyle={{ color: 'white' }} />
                         <Divider />
                         <Menu.Item
-                            onPress={() => toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible)}
+                            onPress={() => {
+                                // For some reasons, the markers only show up after the second time bus data is recieved from socket
+                                // So have to set bus locations for first time or else there's a long delay
+                                // Currently using test data, change to real-time data
+                                setBusLocations([
+                                    { id: "TestBus1", latitude: 46.731 + Math.random() * 0.01, longitude: -117.178 + Math.random() * 0.01 },
+                                    { id: "TestBus2", latitude: 46.728 + Math.random() * 0.01, longitude: -117.165 + Math.random() * 0.01 },
+                                    { id: "TestBus3", latitude: 46.735 + Math.random() * 0.01, longitude: -117.172 + Math.random() * 0.01 },
+                                  ]);
+
+                                toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible)
+                            }}
+                            
                             title={showBuses ? "Hide All Buses" : "Show All Buses"}
                             titleStyle={{ color: 'white' }}
                         />
