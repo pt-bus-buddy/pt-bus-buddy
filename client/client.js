@@ -1,9 +1,9 @@
-import { Client } from "socket.io-client";
+import { io } from "socket.io-client";
 
 // PROCESS:
 // Get the positions AND the calculated time of arrival per stop
 // our server from the back end
-const client = new Client("http://localhost:3000");
+const client = io("http://localhost:3000");
 
 // print success statement if connected
 client.on("connect", () => {
