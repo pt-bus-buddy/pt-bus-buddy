@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://192.168.254.15:3000"); // Replace with your server's IP
+const socket = io("http://192.168.254.15:3000"); // Currently using my IP, need a way to have everyone connect
 
 const toggleBusLocations = (showBuses, setShowBuses, setBusLocations, setMenuVisible) => {    
     if (showBuses) {

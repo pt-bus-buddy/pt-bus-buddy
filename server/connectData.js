@@ -39,9 +39,24 @@ export async function connectData(busPositions) {
   });
   */
 
-  io.on("connection", (socket) => {
+    io.on("connection", (socket) => {
     console.log("Client connected");
 
+  // For testing bus display, comment out later
+  /*
+    setInterval(() => {
+      const testBuses = [
+        { id: "TestBus1", latitude: 46.731 + Math.random() * 0.01, longitude: -117.178 + Math.random() * 0.01 },
+        { id: "TestBus2", latitude: 46.728 + Math.random() * 0.01, longitude: -117.165 + Math.random() * 0.01 },
+        { id: "TestBus3", latitude: 46.735 + Math.random() * 0.01, longitude: -117.172 + Math.random() * 0.01 },
+      ];
+  
+      socket.emit("busUpdate", testBuses);
+    }, 5000); // Sends fake updates every 5 seconds
+*/
+
+    // Actual bus stuff, commented out for testing
+    
     setInterval(() => {
       socket.emit(
         "busUpdate",
@@ -58,6 +73,7 @@ export async function connectData(busPositions) {
       );
       // every 5 seconds it updates
     }, 5000);
+    
   });
 }
 
