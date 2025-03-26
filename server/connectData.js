@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import http from "http";
+import { fetchAllDatasets } from "./fetchData.js";
 
 // http server
 const server = http.createServer();
@@ -7,7 +8,7 @@ const server = http.createServer();
 const io = new Server(server);
 
 // function to write data to json
-export async function connectData(busPositions) {
+export async function connectData() {
   /*
   // debug method:
   // check the name of the second object
@@ -39,10 +40,8 @@ export async function connectData(busPositions) {
   });
   */
 
-    io.on("connection", (socket) => {
-    console.log("Client connected");
 
-  // For testing bus display, comment out later
+    // For testing bus display, comment out later
   /*
     setInterval(() => {
       const testBuses = [
@@ -55,12 +54,15 @@ export async function connectData(busPositions) {
     }, 5000); // Sends fake updates every 5 seconds
 */
 
-    // Actual bus stuff, commented out for testing
-    
-    setInterval(() => {
-      socket.emit(
-        "busUpdate",
-        busPositions.entity.map((bus) => ({
+  io.on("connection", (socket) => {
+    console.log("Client connected");
+
+    const interval = setInterval(async () => {
+      try {
+        const data = await fetchAllDatasets();
+        const busPositions = data.positions;
+
+        const mappedData = busPositions.entity.map((bus) => ({
           id: bus.vehicle.vehicle.id,
           timestamp: Date.now(),
           position: {
@@ -69,11 +71,17 @@ export async function connectData(busPositions) {
             speed: bus.vehicle.position.speed,
             bearing: bus.vehicle.position.bearing,
           },
-        })),
-      );
-      // every 5 seconds it updates
+        }));
+
+        socket.emit("busUpdate", mappedData);
+      } catch (err) {
+        console.error("Error fetching or emitting bus data:", err);
+      }
     }, 5000);
-    
+    socket.on("disconnect", () => {
+      console.log("Client disconnected!");
+      clearInterval(interval);
+    });
   });
 }
 
