@@ -62,7 +62,7 @@ in this sprint (explain briefly)."
 ## Code Files for Review
 Please review the following code files, which were actively developed during this
 sprint, for quality:
-* [Name of code file 1](https://github.com/your_repo/file_extension)
+* [client/App.js](https://github.com/pt-bus-buddy/pt-bus-buddy/blob/main/client/App.js)
 * [Name of code file 2](https://github.com/your_repo/file_extension)
 * [Name of code file 3](https://github.com/your_repo/file_extension)
 
