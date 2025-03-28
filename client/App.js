@@ -13,7 +13,6 @@ const Stack = createStackNavigator();
 
 const HomeScreen = ({ navigation }) => {
     const [userLocation, setUserLocation] = useState(null); // for User's location beacon
-    const [locationPermissionStatus, setLocationPermissionStatus] = useState(null); // For checking state of user's location permissions
     const [menuVisible, setMenuVisible] = useState(false); // state object for menu visibility
     const [busLocations, setBusLocations] = useState([]);  
     const [showBuses, setShowBuses] = useState(false);
@@ -25,8 +24,7 @@ const HomeScreen = ({ navigation }) => {
     // Prompts the user to turn on location services upon opening the app
     useEffect(() => {
         (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync(); // Request location on opening app
-            setLocationPermissionStatus(status); // Update user's location status for later checks
+            let { status } = await Location.requestPermissionsAsync(); // Request location on opening app
             
             if (status !== 'granted') {
                 // We shouldn't set the location beacon if info not available
