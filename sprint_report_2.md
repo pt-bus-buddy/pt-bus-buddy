@@ -1,6 +1,16 @@
 # Sprint 2 Report
 Video Link:
 
+# Kanban Board Progress
+Before Sprint 2:
+![Kanban Board Before Sprint 2](sprintReport1Images/afterSprint.png)
+
+In the Middle of Sprint 2:
+![Kanban Board Middle of Sprint 2](sprintReport2Images/middleSprint2.png)
+
+After Sprint 2:
+
+
 ## What's New (User Facing)
 * (#023) Assigned to: Genevieve - Add Ability to View List of Routes From Dropdown Menu
 * (#016) Assigned to: Joanne - Add Ability to Track Buses on Map
@@ -24,7 +34,7 @@ that it can be addressed later.
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
 * [Link to issue 23](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102922992&issue=pt-bus-buddy%7Cpt-bus-buddy%7C30)
-* [Link to issue 16] (https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102425748&issue=pt-bus-buddy%7Cpt-bus-buddy%7C16)
+* [Link to issue 16](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102425748&issue=pt-bus-buddy%7Cpt-bus-buddy%7C16)
 * URL of issue n
 
 Desirables (Remove this section when you save the file):
