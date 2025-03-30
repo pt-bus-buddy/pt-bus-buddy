@@ -7,12 +7,7 @@ run().catch((err) => console.log(err));
 // function to get data
 async function run() {
   // connect it with web sockets
-  /*
   connectData();
-  */
   // process it
-  /*
   processData();
-  */
-  fetchAllDatasets();
 }

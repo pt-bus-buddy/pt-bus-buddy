@@ -10,10 +10,8 @@ const httpServer = new http.createServer();
 const serverIO = new Server(httpServer);
 
 export async function processData() {
-  /*
   // on connection of our client
   clientIO.on("busUpdate", (rawData) => {
     processRaw(rawData);
   });
-  */
 }
