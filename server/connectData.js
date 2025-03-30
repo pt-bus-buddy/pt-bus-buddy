@@ -9,7 +9,6 @@ const io = new Server(server);
 
 // function to write data to json
 export async function connectData() {
-  /*
   // debug method:
   // check the name of the second object
   console.log("Nested object #1: ", busPositions.entity);
@@ -23,7 +22,6 @@ export async function connectData() {
   // contains additional information
   const messageSize = Object.keys(busPositions.header).length;
   console.log("# of messages for each bus: ", messageSize);
-  */
 
   // debug: print out
   /*
