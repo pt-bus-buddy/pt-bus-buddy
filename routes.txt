@@ -1,0 +1,11 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+3135,113,"Blue","Blue",Loop,3,,273695,FFFFFF
+3137,113,"Silver","Silver",Silver,3,,B7B0B0,FFFFFF
+3138,113,"Loop","Loop",Loop,3,,EC00EC,FFFFFF
+3139,113,"ApartmentLand","ApartmentLand Express",ApartmentLand Express,3,,992727,FFFFFF
+3544,113,"Paradise","Paradise",Loop,3,,1AFF1A,FFFFFF
+3545,113,"Wheat","Wheat",Wheat,3,,4776DD,FFFFFF
+3549,113,"Lentil","Lentil",Loop,3,,0CCC8F,FFFFFF
+5328,113,"Campus","Campus Route",Campus,3,,FF250D,FFFFFF
+6307,113,"To Airport","To Airport",Airport Service,3,,992727,FFFFFF
+6448,113,"From Airport","From Airport",From Airport,3,,992727,FFFFFF
