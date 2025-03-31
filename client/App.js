@@ -100,11 +100,7 @@ const HomeScreen = ({ navigation }) => {
                         {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
                         {busLocations.map(bus => (
                             // Marker label for static bus locations
-                            <Marker
-                                key={bus.id}
-                                coordinate={{ latitude: bus.latitude, longitude: bus.longitude }}
-                                title={`Bus ${bus.id} | Route ${bus.routeNumber}`}
-                            />
+                            <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
                         ))}
                     </MapView>
                     
@@ -134,10 +130,13 @@ const HomeScreen = ({ navigation }) => {
                             }} title="Schedules" titleStyle={{ color: 'white' }} />
                             <Divider />
                             <Menu.Item
-                                onPress={() => toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible)}
-                                title={showBuses ? "Hide All Buses" : "Show All Buses"}
-                                titleStyle={{ color: 'white' }}
-                            />
+                            onPress={() => {
+                                setBusLocations([]); // Clear test data before receiving real data
+                                toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
+                            }}
+                            title={showBuses ? "Hide All Buses" : "Show All Buses"}
+                            titleStyle={{ color: 'white' }}
+                        />
                         </Menu>
                     </View>
 
@@ -173,7 +172,6 @@ const HomeScreen = ({ navigation }) => {
                             </Dialog.Actions>
                         </Dialog>
                     </Portal>
-
                 </View>
             </Provider>
         </GestureHandlerRootView>
