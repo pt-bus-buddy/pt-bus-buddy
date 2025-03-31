@@ -42,7 +42,7 @@ export async function connectData() {
 
 
     // For testing bus display, comment out later
-  /*
+  
     setInterval(() => {
       const testBuses = [
         { id: "TestBus1", latitude: 46.731 + Math.random() * 0.01, longitude: -117.178 + Math.random() * 0.01 },
@@ -52,8 +52,8 @@ export async function connectData() {
   
       socket.emit("busUpdate", testBuses);
     }, 5000); // Sends fake updates every 5 seconds
-*/
 
+/*
   io.on("connection", (socket) => {
     console.log("Client connected");
 
@@ -84,7 +84,7 @@ export async function connectData() {
     });
   });
 }
-
+*/
 server.listen(3000, () => {
   console.log("WebSocket server running on port 3000");
 });

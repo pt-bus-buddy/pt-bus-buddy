@@ -130,10 +130,13 @@ const HomeScreen = ({ navigation }) => {
                             }} title="Schedules" titleStyle={{ color: 'white' }} />
                             <Divider />
                             <Menu.Item
-                                onPress={() => toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible)}
-                                title={showBuses ? "Hide All Buses" : "Show All Buses"}
-                                titleStyle={{ color: 'white' }}
-                            />
+                            onPress={() => {
+                                setBusLocations([]); // Clear test data before receiving real data
+                                toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
+                            }}
+                            title={showBuses ? "Hide All Buses" : "Show All Buses"}
+                            titleStyle={{ color: 'white' }}
+                        />
                         </Menu>
                     </View>
 
