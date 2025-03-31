@@ -100,11 +100,7 @@ const HomeScreen = ({ navigation }) => {
                         {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
                         {busLocations.map(bus => (
                             // Marker label for static bus locations
-                            <Marker
-                                key={bus.id}
-                                coordinate={{ latitude: bus.latitude, longitude: bus.longitude }}
-                                title={`Bus ${bus.id} | Route ${bus.routeNumber}`}
-                            />
+                            <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
                         ))}
                     </MapView>
                     
@@ -173,7 +169,6 @@ const HomeScreen = ({ navigation }) => {
                             </Dialog.Actions>
                         </Dialog>
                     </Portal>
-
                 </View>
             </Provider>
         </GestureHandlerRootView>

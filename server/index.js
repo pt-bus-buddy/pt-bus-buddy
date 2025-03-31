@@ -7,4 +7,3 @@ async function run() {
   // connect it with web sockets
   connectData();
 }
-
