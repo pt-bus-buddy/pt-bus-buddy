@@ -1,8 +1,20 @@
 import { fetchStatic } from "./staticData.js";
+import haversine from "haversine-distance";
 
 export async function processRaw(busPositions) {
   // get our static data
   var staticData = await fetchStatic();
+
+  // get the first bus position for testing
+  // stop PAR_T16
+  const tempLatitudeBus = busPositions[0].position.latitude;
+  const tempLongitudeBus = busPositions[0].position.longitude;
+
+  /*
+  // get the matching stop
+  const tempLatitudeStop = staticData.stopsRecords[]
+  */
+
   /*
   // debugging step: printing all stops
   console.log("List of Stops:");
