@@ -6,9 +6,14 @@ export async function processRaw(busPositions) {
   var staticData = await fetchStatic();
 
   // get the first bus position for testing
-  // stop PAR_T16
+  // stop PAR_T16 (temp)
   const tempLatitudeBus = busPositions[0].position.latitude;
   const tempLongitudeBus = busPositions[0].position.longitude;
+
+  // FIND MATCHING STOP ID WITH STOP FUNCTION
+  // ** implement here **
+
+  // return haversine function IN miles
 
   /*
   // get the matching stop
