@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ScrollView, Alert, Linking } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Menu, Divider, Button, Provider, Dialog, Portal, Text } from 'react-native-paper'; // for popup menu to display bus route options
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -24,12 +24,8 @@ const HomeScreen = ({ navigation }) => {
     // Prompts the user to turn on location services upon opening the app
     useEffect(() => {
         (async () => {
-            let { status } = await Location.requestPermissionsAsync(); // Request location on opening app
-            
-            if (status !== 'granted') {
-                // We shouldn't set the location beacon if info not available
-                return;
-            }
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') return;
 
             let location = await Location.getCurrentPositionAsync({});
             setUserLocation({
@@ -41,17 +37,7 @@ const HomeScreen = ({ navigation }) => {
 
     // Zooms to the user's location which is attained using the Google Maps API
     const zoomToUserLocation = () => {
-        // Check if user's location is on. If not, prompt to turn it on
-        if (!userLocation) {
-            // Display warning message
-            Alert.alert('Location Services Disabled',
-                'Please enable location services in your device settings.',
-                    [
-                        { text: 'Cancel', style: 'cancel' },
-                        { text: 'Open Settings', onPress: () => Linking.openSettings() },
-                    ]
-            );
-        } else if (mapRef.current) {
+        if (mapRef.current && userLocation) {
             mapRef.current.animateToRegion({
                 latitude: userLocation.latitude,
                 longitude: userLocation.longitude,
