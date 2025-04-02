@@ -13,6 +13,7 @@ After Sprint 2:
 
 ## What's New (User Facing)
 * (#023) Assigned to: Genevieve - Add Ability to View List of Routes From Dropdown Menu
+* (#004) Assigned to: Genevieve - Add Error Checking for Zooming to User Location Without Location Services
 * (#016) Assigned to: Joanne - Add Ability to Track Buses on Map
 * Feature n or Bug Fix n
 
@@ -23,17 +24,12 @@ how you went about the work described there, any barriers you overcame, and any
 significant learnings for your team.
 
 ## Unfinished Work
-If applicable, explain the work you did not finish in this sprint. For issues/user
-stories in the current sprint that have not been closed, (a) any progress toward
-completion of the issues has been clearly tracked (by checking the checkboxes of
-acceptance criteria), (b) a comment has been added to the issue to explain why the
-issue could not be completed (e.g., "we ran out of time" or "we did not anticipate
-it would be so much work"), and (c) the issue is added to a subsequent sprint, so
-that it can be addressed later.
+Not applicable/no unfinished work for Sprint 2.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
 * [Link to issue 23](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102922992&issue=pt-bus-buddy%7Cpt-bus-buddy%7C30)
+* [Link to issue 4](https://github.com/orgs/pt-bus-buddy/projects/2?pane=issue&itemId=102425732&issue=pt-bus-buddy%7Cpt-bus-buddy%7C4)
 * [Link to issue 16](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102425748&issue=pt-bus-buddy%7Cpt-bus-buddy%7C16)
 * URL of issue n
 
@@ -68,14 +64,14 @@ sprint, for quality:
 
 ## Retrospective Summary
 Here's what went well:
-* Item 1
-* Item 2
+* Communication 
+* Got a large number of issues done in this sprint
 * Item x
 Here's what we'd like to improve:
-* Item 1
+* Evenly spacing work throughout the Sprint
 * Item 2
 * Item x
 Here are changes we plan to implement in the next sprint:
-* Item 1
+* Breaking work into smaller chunks
 * Item 2
 * Item x
