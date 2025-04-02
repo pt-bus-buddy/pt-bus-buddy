@@ -19,7 +19,7 @@ export async function connectData() {
 
         const mappedData = busPositions.entity.map((bus) => ({
           id: bus.vehicle.vehicle.id,
-          tripId: bus.vehicle.trip.tripId,
+          tripId: bus.vehicle.trip ? bus.vehicle.trip.tripId : null,
           timestamp: Date.now(),
           position: {
             latitude: bus.vehicle.position.latitude,
