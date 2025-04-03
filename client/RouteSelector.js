@@ -33,7 +33,7 @@ const RouteSelector = ({ visible, onDismiss, busRouteNames, onRouteSelect, selec
                     onPress={() => {
                         onRouteSelect(null);
                     }}
-                    labelStyle={{ color: 'black' }}
+                    labelStyle={{ color: theme.colors.text }}
                 >
                     Clear
                 </Button>
