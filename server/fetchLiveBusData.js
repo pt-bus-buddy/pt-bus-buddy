@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 import util from "util";
 
 // function to get data
-export async function fetchAllDatasets() {
+export async function fetchLiveBusData() {
   // variables
   const positionUrl = "https://pullmanbusbeacon.com/gtfs-rt/vehiclepositions";
   const realTimeUrl = "https://pullmanbusbeacon.com/gtfs-rt/tripupdates";

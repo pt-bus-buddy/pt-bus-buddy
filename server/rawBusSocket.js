@@ -1,20 +1,20 @@
 import { Server } from "socket.io";
 import http from "http";
-import { fetchAllDatasets } from "./fetchData.js";
+import { fetchLiveBusData } from "./fetchLiveBusData.js";
 
 // http server
 const server = http.createServer();
 // create a socket from our http
 const io = new Server(server);
 
-// function to write data to json
-export async function connectData() {
+// socket to connect our bus positions
+export async function rawBusSocket() {
   io.on("connection", (socket) => {
     console.log("Client connected");
 
     const interval = setInterval(async () => {
       try {
-        const data = await fetchAllDatasets();
+        const data = await fetchLiveBusData();
         const busPositions = data.positions;
 
         const mappedData = busPositions.entity.map((bus) => ({

@@ -9,7 +9,7 @@ const clientIO = io("http://localhost:3000");
 const httpServer = new http.createServer();
 const serverIO = new Server(httpServer);
 
-export async function processData() {
+export async function processRawData() {
   // on connection of our client
   clientIO.on("busUpdate", (rawData) => {
     processRaw(rawData);

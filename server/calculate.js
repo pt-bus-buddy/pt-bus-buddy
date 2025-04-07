@@ -22,6 +22,7 @@ export async function processRaw(busPositions) {
   const tempLatitudeStop = staticData.stopsRecords[]
   */
 
+  /*
   // debugging step: printing all stops
   console.log("List of Stops:");
   staticData.stopsRecords.forEach((stop, index) => {
@@ -29,16 +30,22 @@ export async function processRaw(busPositions) {
       `#${index + 1}: [${stop.stop_id}] ${stop.stop_name} (${stop.stop_lat}, ${stop.stop_lon})`,
     );
   });
+  */
+  /*
   // debugging step: printing all trips
   console.log("List of Trips:");
   staticData.tripsRecords.forEach((trip, index) => {
     console.log(`#${index + 1}: [${trip.trip_id}]`);
   });
+  */
+  /*
   // debugging step: printing all the stop times
   console.log("List of Stop Time:");
   staticData.timeRecords.forEach((entry, index) => {
     console.log(`${index + 1}: [${entry.trip_id}] Stop: ${entry.stop_id}`);
   });
+  */
+
   // debugging step: printing all bus positions and id
   console.log("\nLive Bus Positions:");
   busPositions.forEach((bus, index) => {
