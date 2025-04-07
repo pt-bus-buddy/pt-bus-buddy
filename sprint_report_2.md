@@ -40,14 +40,14 @@ sprint, for quality:
 * [client/RouteSelector](https://github.com/pt-bus-buddy/pt-bus-buddy/blob/main/client/RouteSelector.js)
 
 ## Retrospective Summary
-!Here's what went well:
+#Here's what went well:
 * Communication 
 * Got a large number of issues done in this sprint
 * Got much of our user-facing issues done
-!Here's what we'd like to improve:
+#Here's what we'd like to improve:
 * Evenly spacing work throughout the Sprint
 * Making regimented PR's
-!Here are changes we plan to implement in the next sprint:
+#Here are changes we plan to implement in the next sprint:
 * Breaking work into smaller chunks
 * Not cramming work into the end of the sprint
 * Meeting more consistently and discussing status
