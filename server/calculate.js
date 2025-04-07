@@ -56,4 +56,6 @@ export async function processRaw(busPositions) {
     console.log("  Bearing:  ", bus.position.bearing);
     console.log("  Speed:    ", bus.position.speed);
   });
+
+  // debugging: calculating on bus position:
 }
