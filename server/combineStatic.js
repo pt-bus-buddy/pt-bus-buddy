@@ -21,6 +21,8 @@ export async function combineStatic() {
   let dataMap = new Map();
 
   // store necessary stop time into our dataMap
+
+  // actually, what we can do is create another map where we map the trip id to stop id, and vice versa in order to fill in the missing key for the later records.
   stopTimeRecords
     .filter((record) => {
       /* debug statement:
@@ -39,14 +41,17 @@ export async function combineStatic() {
     });
 
   // store necessary trip records into our data map
+  //
+  //
   tripRecords
     .filter((record) => {
       return record.route_id;
     })
     .forEach((record) => {
-      let key = `${record.trip_id}-${record.stop_id}`;
+      // i know that tripRecords does NOT contain a stop id
+      let key = `${record.trip_id}`;
       // get the already existing key (or none) since we populated it with stopTime
-      let existing = dataMap.get(key);
+      let existing = dataMap.get(key.startsWith(key));
       // for each record's trip id as our key, add the route_id as well
       dataMap.set(key, {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
@@ -62,9 +67,10 @@ export async function combineStatic() {
       return record.stop_name && record.stop_lat && record.stop_lon;
     })
     .forEach((record) => {
-      let key = `${record.trip_id}-${record.stop_id}`;
+      // i know that stopRecords does NOT contain a trip id
+      let key = `${record.stop_id}`;
       // get the already existing key (or none) since we populated it with stopTime
-      let existing = dataMap.get(key);
+      let existing = dataMap.get(key.endsWith(key));
       dataMap.set(key, {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
         // apply spread syntax to iterate OVER the existing elements and generate new pairs
@@ -75,11 +81,11 @@ export async function combineStatic() {
       });
     });
 
+  /* Debug Statement
   // of since dataMap is an iterable value and not enumerated
   for (const [key, value] of dataMap) {
     // split our id
     const [trip_id, stop_id] = key.split("-");
-    /* Debug Statement
     console.log(
       "Key(TripID): ",
       trip_id,
@@ -88,8 +94,8 @@ export async function combineStatic() {
       "Data: ",
       value,
     );
-    */
   }
+  */
 
   // now we can write to file
 
