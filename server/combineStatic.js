@@ -1,11 +1,6 @@
 import { fetchStatic } from "./staticData.js";
 import fs from "fs";
 
-// PSEUDO:
-// STOPS contains the coordinates
-// STOP TIMES contains the trip id and STOP ID!!
-// TRIPS contains the trip id
-// connection logic: TRIP + STOPS => STOP TIMES => MATCHING COORDINATES DEPENDING ON BUS COORDS
 // match all connecting trips into one big file
 export async function combineStatic() {
   // get our records
@@ -118,13 +113,14 @@ export async function combineStatic() {
   }
   */
 
-  /* Debug Statement: Print out other two maps*/
+  /* Debug Statement: Print out other two maps
   for (const [key, value] of stopKeyMap) {
     console.log("Key(Stop):", key, "Value(Trip):", value);
   }
   for (const [key, value] of tripKeyMap) {
     console.log("Key(Trip):", key, "Value(Key):", value);
   }
+  */
 
   // now we can write to file
 

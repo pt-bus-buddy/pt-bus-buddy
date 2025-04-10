@@ -1,7 +1,8 @@
+import fs from "fs";
 import { fetchStatic } from "./staticData.js";
 import haversine from "haversine-distance";
 
-export async function processRaw(busPositions) {
+export async function calculateAllEta(busPositions) {
   // get our static data
   var staticData = await fetchStatic();
 
@@ -11,6 +12,9 @@ export async function processRaw(busPositions) {
   const tempLatitudeBus = busPositions[0].position.latitude;
   const tempLongitudeBus = busPositions[0].position.longitude;
   */
+  for (const bus of busPositions) {
+    const tripId = bus.id;
+  }
 
   // FIND MATCHING STOP ID WITH STOP FUNCTION
   // ** implement here **
@@ -56,6 +60,4 @@ export async function processRaw(busPositions) {
     console.log("  Bearing:  ", bus.position.bearing);
     console.log("  Speed:    ", bus.position.speed);
   });
-
-  // debugging: calculating on bus position:
 }
