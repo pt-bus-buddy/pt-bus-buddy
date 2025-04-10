@@ -19,6 +19,7 @@ export async function combineStatic() {
 
   // create a map to merge by id
   let dataMap = new Map();
+  // there could be multiple stop_ids, so our value should be an array
   // map to store <trip_id, stop_id>
   let tripKeyMap = new Map();
   // map to store <stop_id, trip_id>
@@ -41,10 +42,19 @@ export async function combineStatic() {
       dataMap.set(key, {
         trip_id: record.trip_id,
         stop_id: record.stop_id,
-      }),
-        // store the additional keys since trip records and stop records have missing ids
-        tripKeyMap.set(record.trip_id, record.stop_id);
-      stopKeyMap.set(record.stop_id, record.trip_id);
+      });
+      // store additional keys since trip records and stop records have missing id
+
+      // if trip key map does not have this id, intialize the array before appending
+      if (!tripKeyMap.has(record.trip_id)) {
+        tripKeyMap.set(record.trip_id, []);
+      }
+      tripKeyMap.get(record.trip_id).push(key);
+      // same with stop key map
+      if (!stopKeyMap.has(record.stop_id)) {
+        stopKeyMap.set(record.stop_id, []);
+      }
+      stopKeyMap.get(record.stop_id).push(key);
     });
 
   // store necessary trip records into our data map
@@ -53,18 +63,20 @@ export async function combineStatic() {
       return record.route_id;
     })
     .forEach((record) => {
-      // i know that tripRecords does NOT contain a stop id
-      let stopKey = tripKeyMap.get(record.trip_id);
-      let key = `${record.trip_id}-${stopKey}`;
-      // get the already existing key (or none) since we populated it with stopTime
-      let existing = dataMap.get(key) || {};
-      // for each record's trip id as our key, add the route_id as well
-      dataMap.set(key, {
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-        // apply spread syntax to iterate OVER the existing elements and generate new pairs
-        ...existing,
-        route_id: record.route_id,
-      });
+      // i know that tripRecords does NOT contain a stop id, so we should get the values
+      let keys = tripKeyMap.get(record.trip_id);
+      // there could be multiple keys per trip id
+      for (const key of keys) {
+        // get the already existing key (or none) since we populated it with stopTime
+        let existing = dataMap.get(key);
+        // for each record's trip id as our key, add the route_id as well
+        dataMap.set(key, {
+          // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+          // apply spread syntax to iterate OVER the existing elements and generate new pairs
+          ...existing,
+          route_id: record.route_id,
+        });
+      }
     });
 
   // store necessary stop records into our data map
@@ -73,19 +85,21 @@ export async function combineStatic() {
       return record.stop_name && record.stop_lat && record.stop_lon;
     })
     .forEach((record) => {
-      // i know that stopRecords does NOT contain a trip id
-      let tripKey = stopKeyMap.get(record.stop_id);
-      let key = `${tripKey}-${record.stop_id}`;
-      // get the already existing key (or none) since we populated it with stopTime
-      let existing = dataMap.get(key) || {};
-      dataMap.set(key, {
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-        // apply spread syntax to iterate OVER the existing elements and generate new pairs
-        ...existing,
-        stop_name: record.stop_name,
-        stop_lat: record.stop_lat,
-        stop_lon: record.stop_lon,
-      });
+      // i know that stopRecords does NOT contain a trip id, so we should get the vlaues
+      let keys = stopKeyMap.get(record.stop_id);
+      // there could be multiple key, so loop through each key and populate it with coordinates
+      for (const key of keys) {
+        // get the already existing key (or none) since we populated it with stopTime
+        let existing = dataMap.get(key);
+        dataMap.set(key, {
+          // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+          // apply spread syntax to iterate OVER the existing elements and generate new pairs
+          ...existing,
+          stop_name: record.stop_name,
+          stop_lat: record.stop_lat,
+          stop_lon: record.stop_lon,
+        });
+      }
     });
 
   /* Debug Statement
@@ -103,6 +117,14 @@ export async function combineStatic() {
     );
   }
   */
+
+  /* Debug Statement: Print out other two maps*/
+  for (const [key, value] of stopKeyMap) {
+    console.log("Key(Stop):", key, "Value(Trip):", value);
+  }
+  for (const [key, value] of tripKeyMap) {
+    console.log("Key(Trip):", key, "Value(Key):", value);
+  }
 
   // now we can write to file
 
