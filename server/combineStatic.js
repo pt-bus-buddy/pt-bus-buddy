@@ -19,6 +19,10 @@ export async function combineStatic() {
 
   // create a map to merge by id
   let dataMap = new Map();
+  // map to store <trip_id, stop_id>
+  let tripKeyMap = new Map();
+  // map to store <stop_id, trip_id>
+  let stopKeyMap = new Map();
 
   // store necessary stop time into our dataMap
 
@@ -37,19 +41,21 @@ export async function combineStatic() {
       dataMap.set(key, {
         trip_id: record.trip_id,
         stop_id: record.stop_id,
-      });
+      }),
+        // store the additional keys since trip records and stop records have missing ids
+        tripKeyMap.set(record.trip_id, record.stop_id);
+      stopKeyMap.set(record.stop_id, record.trip_id);
     });
 
   // store necessary trip records into our data map
-  //
-  //
   tripRecords
     .filter((record) => {
       return record.route_id;
     })
     .forEach((record) => {
       // i know that tripRecords does NOT contain a stop id
-      let key = `${record.trip_id}`;
+      let stopKey = tripKeyMap.get(record.trip_id);
+      let key = `${record.trip_id}-${stopKey}`;
       // get the already existing key (or none) since we populated it with stopTime
       let existing = dataMap.get(key.startsWith(key));
       // for each record's trip id as our key, add the route_id as well
@@ -68,7 +74,8 @@ export async function combineStatic() {
     })
     .forEach((record) => {
       // i know that stopRecords does NOT contain a trip id
-      let key = `${record.stop_id}`;
+      let tripKey = stopKeyMap.get(record.stop_id);
+      let key = `${tripKey}-${record.stop_id}`;
       // get the already existing key (or none) since we populated it with stopTime
       let existing = dataMap.get(key.endsWith(key));
       dataMap.set(key, {
