@@ -57,7 +57,7 @@ export async function combineStatic() {
       let stopKey = tripKeyMap.get(record.trip_id);
       let key = `${record.trip_id}-${stopKey}`;
       // get the already existing key (or none) since we populated it with stopTime
-      let existing = dataMap.get(key.startsWith(key));
+      let existing = dataMap.get(key) || {};
       // for each record's trip id as our key, add the route_id as well
       dataMap.set(key, {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
@@ -77,7 +77,7 @@ export async function combineStatic() {
       let tripKey = stopKeyMap.get(record.stop_id);
       let key = `${tripKey}-${record.stop_id}`;
       // get the already existing key (or none) since we populated it with stopTime
-      let existing = dataMap.get(key.endsWith(key));
+      let existing = dataMap.get(key) || {};
       dataMap.set(key, {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
         // apply spread syntax to iterate OVER the existing elements and generate new pairs
