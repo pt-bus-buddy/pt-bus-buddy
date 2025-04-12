@@ -14,17 +14,21 @@ export async function calculateAllEta(busPositions) {
   */
   for (const bus of busPositions) {
     const tripId = bus.id;
+
+    // Debug statement: Seeing if this loop gets called
+    console.log("Reading for trip ID:", tripId);
+
+    fs.readFile("./mergedStatic.json", "utf8", (err, data) => {
+      if (err) {
+        console.log("failed to find file");
+        return;
+      }
+      // make sure the trip id is of type string, since data expects a string type not int
+      if (data.includes(tripId.toString())) {
+        console.log("Found trips with: ", tripId);
+      }
+    });
   }
-
-  // FIND MATCHING STOP ID WITH STOP FUNCTION
-  // ** implement here **
-
-  // return haversine function IN miles
-
-  /*
-  // get the matching stop
-  const tempLatitudeStop = staticData.stopsRecords[]
-  */
 
   /*
   // debugging step: printing all stops
@@ -35,6 +39,7 @@ export async function calculateAllEta(busPositions) {
     );
   });
   */
+
   /*
   // debugging step: printing all trips
   console.log("List of Trips:");
@@ -42,6 +47,7 @@ export async function calculateAllEta(busPositions) {
     console.log(`#${index + 1}: [${trip.trip_id}]`);
   });
   */
+
   /*
   // debugging step: printing all the stop times
   console.log("List of Stop Time:");
@@ -50,6 +56,7 @@ export async function calculateAllEta(busPositions) {
   });
   */
 
+  /*
   // debugging step: printing all bus positions and id
   console.log("\nLive Bus Positions:");
   busPositions.forEach((bus, index) => {
@@ -60,4 +67,5 @@ export async function calculateAllEta(busPositions) {
     console.log("  Bearing:  ", bus.position.bearing);
     console.log("  Speed:    ", bus.position.speed);
   });
+  */
 }

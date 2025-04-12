@@ -17,17 +17,29 @@ export async function rawBusSocket() {
         const data = await fetchLiveBusData();
         const busPositions = data.positions;
 
-        const mappedData = busPositions.entity.map((bus) => ({
-          id: bus.vehicle.vehicle.id,
-          tripId: bus.vehicle.trip ? bus.vehicle.trip.tripId : null,
-          timestamp: Date.now(),
-          position: {
-            latitude: bus.vehicle.position.latitude,
-            longitude: bus.vehicle.position.longitude,
-            speed: bus.vehicle.position.speed,
-            bearing: bus.vehicle.position.bearing,
-          },
-        }));
+        // Debug: log buses with missing position data
+        busPositions.entity.forEach((bus) => {
+          if (!bus.vehicle?.position) {
+            console.warn(
+              "Skipping bus with missing position:",
+              bus.vehicle?.vehicle?.id,
+            );
+          }
+        });
+
+        const mappedData = busPositions.entity
+          .filter((bus) => bus.vehicle?.position != null)
+          .map((bus) => ({
+            id: bus.vehicle.vehicle.id,
+            tripId: bus.vehicle.trip ? bus.vehicle.trip.tripId : null,
+            timestamp: Date.now(),
+            position: {
+              latitude: bus.vehicle.position.latitude,
+              longitude: bus.vehicle.position.longitude,
+              speed: bus.vehicle.position.speed,
+              bearing: bus.vehicle.position.bearing,
+            },
+          }));
 
         socket.emit("busUpdate", mappedData);
       } catch (err) {

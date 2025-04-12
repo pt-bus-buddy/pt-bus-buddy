@@ -19,9 +19,17 @@ export async function combineStatic() {
   let tripKeyMap = new Map();
   // map to store <stop_id, trip_id>
   let stopKeyMap = new Map();
+  // map to store <trip_id, to route_id>
+  let tripToRouteMap = new Map();
+
+  // do this first so we have our route key (and our map isn't empty)
+  tripRecords.forEach((record) => {
+    if (record.trip_id && record.route_id) {
+      tripToRouteMap.set(record.trip_id, record.route_id);
+    }
+  });
 
   // store necessary stop time into our dataMap
-
   // actually, what we can do is create another map where we map the trip id to stop id, and vice versa in order to fill in the missing key for the later records.
   stopTimeRecords
     .filter((record) => {
@@ -31,8 +39,9 @@ export async function combineStatic() {
       return record.trip_id && record.stop_id;
     })
     .forEach((record) => {
-      // let key = [record.trip_id, record.stop_id];
-      let key = `${record.trip_id}-${record.stop_id}`;
+      // get the route
+      const route_id = tripToRouteMap.get(record.trip_id);
+      let key = `${route_id}-${record.stop_id}`;
       // set the key to be the trip id AND stop id
       dataMap.set(key, {
         trip_id: record.trip_id,
@@ -69,6 +78,7 @@ export async function combineStatic() {
           // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
           // apply spread syntax to iterate OVER the existing elements and generate new pairs
           ...existing,
+          trip_id: record.trip_id,
           route_id: record.route_id,
         });
       }
