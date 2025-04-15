@@ -1,33 +1,39 @@
-import fs from "fs";
+import fs from "fs/promises";
 import { fetchStatic } from "./staticData.js";
 import haversine from "haversine-distance";
 
-export async function calculateAllEta(busPositions) {
-  // get our static data
+async function loadStaticData() {
+  // fetch static data before loading file
   var staticData = await fetchStatic();
 
+  // get file and return it parsed
+  try {
+    const data = await fs.readFile("./mergedStatic.json", "utf8");
+    return JSON.parse(data);
+  } catch (err) {
+    console.error("Error reading merged static file", err);
+    return null;
+  }
+}
+
+export async function calculateAllEta(busPositions) {
   /*
   // get the first bus position for testing
   // stop PAR_T16 (temp)
   const tempLatitudeBus = busPositions[0].position.latitude;
   const tempLongitudeBus = busPositions[0].position.longitude;
   */
+
+  // call our load static data function to get an object of our json
+  const parsedData = await loadStaticData();
+  if (!parsedData) {
+    return;
+  }
   for (const bus of busPositions) {
-    const tripId = bus.id;
+    const routeId = bus.id;
 
-    // Debug statement: Seeing if this loop gets called
-    console.log("Reading for trip ID:", tripId);
-
-    fs.readFile("./mergedStatic.json", "utf8", (err, data) => {
-      if (err) {
-        console.log("failed to find file");
-        return;
-      }
-      // make sure the trip id is of type string, since data expects a string type not int
-      if (data.includes(tripId.toString())) {
-        console.log("Found trips with: ", tripId);
-      }
-    });
+    /* extract coordinates */
+    parsedData.forEach(([key, route]) => {});
   }
 
   /*
