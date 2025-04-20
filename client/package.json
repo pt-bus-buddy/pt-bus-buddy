@@ -30,7 +30,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^2.24.0",
-    "react-native-maps": "^1.18.0",
+    "react-native-maps": "1.18.0",
     "react-native-paper": "^5.13.1",
     "react-native-pdf": "^6.7.7",
     "react-native-pdf-viewer": "^0.1.1",
