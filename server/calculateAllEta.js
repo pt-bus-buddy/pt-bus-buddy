@@ -1,24 +1,40 @@
+import fs from "fs/promises";
 import { fetchStatic } from "./staticData.js";
 import haversine from "haversine-distance";
 
-export async function processRaw(busPositions) {
-  // get our static data
+async function loadStaticData() {
+  // fetch static data before loading file
   var staticData = await fetchStatic();
 
+  // get file and return it parsed
+  try {
+    const data = await fs.readFile("./mergedStatic.json", "utf8");
+    return JSON.parse(data);
+  } catch (err) {
+    console.error("Error reading merged static file", err);
+    return null;
+  }
+}
+
+export async function calculateAllEta(busPositions) {
+  /*
   // get the first bus position for testing
   // stop PAR_T16 (temp)
   const tempLatitudeBus = busPositions[0].position.latitude;
   const tempLongitudeBus = busPositions[0].position.longitude;
-
-  // FIND MATCHING STOP ID WITH STOP FUNCTION
-  // ** implement here **
-
-  // return haversine function IN miles
-
-  /*
-  // get the matching stop
-  const tempLatitudeStop = staticData.stopsRecords[]
   */
+
+  // call our load static data function to get an object of our json
+  const parsedData = await loadStaticData();
+  if (!parsedData) {
+    return;
+  }
+  for (const bus of busPositions) {
+    const routeId = bus.id;
+
+    /* extract coordinates */
+    parsedData.forEach(([key, route]) => {});
+  }
 
   /*
   // debugging step: printing all stops
@@ -29,6 +45,7 @@ export async function processRaw(busPositions) {
     );
   });
   */
+
   /*
   // debugging step: printing all trips
   console.log("List of Trips:");
@@ -36,6 +53,7 @@ export async function processRaw(busPositions) {
     console.log(`#${index + 1}: [${trip.trip_id}]`);
   });
   */
+
   /*
   // debugging step: printing all the stop times
   console.log("List of Stop Time:");
@@ -43,6 +61,7 @@ export async function processRaw(busPositions) {
     console.log(`${index + 1}: [${entry.trip_id}] Stop: ${entry.stop_id}`);
   });
   */
+
   /*
   // debugging step: printing all bus positions and id
   console.log("\nLive Bus Positions:");

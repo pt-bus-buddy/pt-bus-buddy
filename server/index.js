@@ -1,14 +1,13 @@
-import { connectData } from "./connectData.js";
-import { fetchAllDatasets } from "./fetchData.js";
-import { processData } from "./processData.js";
+import { rawBusSocket } from "./rawBusSocket.js";
+import { processRawData } from "./processRawData.js";
 // catch error
 run().catch((err) => console.log(err));
 
 // function to get data
 async function run() {
-  // connect it with web sockets
-  connectData();
+  // run our raw bus socket
+  rawBusSocket();
   // process it
-  processData();
+  processRawData();
 }
 
