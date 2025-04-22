@@ -1,14 +1,18 @@
-const toggleBusLocations = (showBuses, setShowBuses, setBusLocations, setMenuVisible) => {
+import { io } from "socket.io-client";
+
+const socket = io("http://192.168.254.15:3000"); // Currently using my IP, need a way to have everyone connect
+
+const toggleBusLocations = (showBuses, setShowBuses, setBusLocations, setMenuVisible) => {    
     if (showBuses) {
-        setBusLocations([]); // Clear bus markers
+        setBusLocations([]); // Clear bus markers when toggled off
+        socket.off("busUpdate"); // Stop listening for updates
     } else {
-        const buses = [
-            { id: 1, latitude: 46.731, longitude: -117.178 },
-            { id: 2, latitude: 46.728, longitude: -117.165 },
-            { id: 3, latitude: 46.735, longitude: -117.172 },
-        ];
-        setBusLocations(buses); // Add bus markers
+        socket.on("busUpdate", (buses) => {
+            console.log("Received bus data:", buses);
+            setBusLocations(buses);
+          });
     }
+
     setShowBuses(!showBuses);
     setMenuVisible(false);
 };

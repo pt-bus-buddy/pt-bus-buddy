@@ -1,71 +1,53 @@
 # Sprint 2 Report
 Video Link:
 
+# Kanban Board Progress
+Before Sprint 2:
+![Kanban Board Before Sprint 2](sprintReport1Images/afterSprint.png)
+
+In the Middle of Sprint 2:
+![Kanban Board Middle of Sprint 2](sprintReport2Images/middleSprint2.png)
+
+After Sprint 2:
+![Kanban Board After Sprint 2](https://github.com/pt-bus-buddy/pt-bus-buddy/blob/main/sprintReport2Images/afterSprint2.png)
+
 ## What's New (User Facing)
 * (#023) Assigned to: Genevieve - Add Ability to View List of Routes From Dropdown Menu
-* Feature 2 or Bug Fix 2
-* Feature n or Bug Fix n
+* (#004) Assigned to: Genevieve - Add Error Checking for Zooming to User Location Without Location Services
+* (#018.1) Assigned to: Joanne - Add Ability to Track Buses on Map
+* (#011) Assigned to: Collin - Add Route Display
+* (#016) Assigned to: Collin - Allow Users to Pick Individual Buses on Map
 
 ## Work Summary (Developer Facing)
-Provide a one paragraph synposis of what your team accomplished this sprint. Don't
-repeat the "What's New" list of features. Instead, help the instructor understand
-how you went about the work described there, any barriers you overcame, and any
-significant learnings for your team.
+The team worked hard this sprint to finish much of the essential user-facing features. Having wrapped up the bus display, route display, and associated buttons and toggles, we can begin to focus on quality of life specific updates in sprint 3. This sprint was difficult as it focused primarily on socket-based function. Between the socket-based work and the data parsing necessary to gather stop data, additional files were necessary that took care of said functions. All in all, despite these features being a moderate amount of work, the added data and socket work created a hefty workload for the team to manage. Meetings this sprint were productive, and the team did a good job of keeping open communication on the status of their work. Overall, this sprint went pretty smoothly, and next sprint should benefit as a result.
 
 ## Unfinished Work
-If applicable, explain the work you did not finish in this sprint. For issues/user
-stories in the current sprint that have not been closed, (a) any progress toward
-completion of the issues has been clearly tracked (by checking the checkboxes of
-acceptance criteria), (b) a comment has been added to the issue to explain why the
-issue could not be completed (e.g., "we ran out of time" or "we did not anticipate
-it would be so much work"), and (c) the issue is added to a subsequent sprint, so
-that it can be addressed later.
+Not applicable/no unfinished work for Sprint 2.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
-* [Link to issue 23](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102922992&issue=pt-bus-buddy%7Cpt-bus-buddy%7C30)
-* URL of issue 2
-* URL of issue n
-
-Desirables (Remove this section when you save the file):
-* Each issue should be assigned to a milestone
-* Each completed issue should be assigned to a pull request
-* Each completed pull request should include a link to a "Before and After" video
-* All team members who contributed to the issue should be assigned to it on
-GitHub
-* Each issue should be assigned story points using a label
-* Story points contribution of each team member should be indicated in a comment
-
-
-## Incomplete Issues/User Stories
-Here are links to issues we worked on but did not complete in this sprint:
-* URL of issue 1 <<One sentence explanation of why issue was not completed>>
-* URL of issue 2 <<One sentence explanation of why issue was not completed>>
-* URL of issue n <<One sentence explanation of why issue was not completed>>
-Examples of explanations (Remove this section when you save the file):
-* "We ran into a complication we did not anticipate (explain briefly)."
-* "We decided that the feature did not add sufficient value for us to work on it
-in this sprint (explain briefly)."
-* "We could not reproduce the bug" (explain briefly).
-* "We did not get to this issue because..." (explain briefly)
+* [Link to issue 023](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102922992&issue=pt-bus-buddy%7Cpt-bus-buddy%7C30)
+* [Link to issue 004](https://github.com/orgs/pt-bus-buddy/projects/2?pane=issue&itemId=102425732&issue=pt-bus-buddy%7Cpt-bus-buddy%7C4)
+* [Link to issue 018.1](https://github.com/orgs/pt-bus-buddy/projects/2/views/1?pane=issue&itemId=102425748&issue=pt-bus-buddy%7Cpt-bus-buddy%7C16)
+* [Link to issue 011](https://github.com/orgs/pt-bus-buddy/projects/2?pane=issue&itemId=102425741&issue=pt-bus-buddy%7Cpt-bus-buddy%7C11)
+* [Link to issue 016](https://github.com/orgs/pt-bus-buddy/projects/2?pane=issue&itemId=102425748&issue=pt-bus-buddy%7Cpt-bus-buddy%7C16)
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this
 sprint, for quality:
-* [Name of code file 1](https://github.com/your_repo/file_extension)
-* [Name of code file 2](https://github.com/your_repo/file_extension)
-* [Name of code file 3](https://github.com/your_repo/file_extension)
+* [client/App.js](https://github.com/pt-bus-buddy/pt-bus-buddy/blob/main/client/App.js)
+* [client/ShowBusToggle.js](https://github.com/pt-bus-buddy/pt-bus-buddy/blob/main/client/ShowBusToggle.js)
+* [client/RouteSelector](https://github.com/pt-bus-buddy/pt-bus-buddy/blob/main/client/RouteSelector.js)
 
 ## Retrospective Summary
-Here's what went well:
-* Item 1
-* Item 2
-* Item x
-Here's what we'd like to improve:
-* Item 1
-* Item 2
-* Item x
-Here are changes we plan to implement in the next sprint:
-* Item 1
-* Item 2
-* Item x
+* Here's what went well:
+* Communication 
+* Got a large number of issues done in this sprint
+* Got much of our user-facing issues done
+* Here's what we'd like to improve:
+* Evenly spacing work throughout the Sprint
+* Making regimented PR's
+* Here are changes we plan to implement in the next sprint:
+* Breaking work into smaller chunks
+* Not cramming work into the end of the sprint
+* Meeting more consistently and discussing status
