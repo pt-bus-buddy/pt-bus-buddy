@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, ScrollView, Alert, Linking } from 'react-native';
-import { Menu, Divider, Button, Provider, Dialog, Portal, Text } from 'react-native-paper'; // for popup menu to display bus route options
+import { Menu, Divider, Button, Provider, Dialog, Portal, Text, IconButton } from 'react-native-paper';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SchedulesScreen from './SchedulesScreen';
@@ -11,25 +12,34 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
+// All possible busses that are operating, could change the number to the actual bus ID for easy lookup
+const busRouteNames = [
+    { number: 1, name: 'Campus Route' },
+    { number: 2, name: 'Blue Route' },
+    { number: 3, name: 'Loop Route' },
+    { number: 4, name: 'Apartmentland Express' },
+    { number: 5, name: 'Silver Route' },
+    { number: 6, name: 'Paradise Route' },
+    { number: 7, name: 'Wheat Route' },
+    { number: 8, name: 'Lentil Route' },
+];
+
 const HomeScreen = ({ navigation }) => {
     const [userLocation, setUserLocation] = useState(null); // for User's location beacon
     const [menuVisible, setMenuVisible] = useState(false); // state object for menu visibility
-    const [busLocations, setBusLocations] = useState([]);  
-    const [showBuses, setShowBuses] = useState(false);
-    const [routeDialogVisible, displayRouteMenuPopup] = useState(false); // dictates whether the routes popup to visible or not
-    const [selectedRoute, setSelectedRoute] = useState(null); // use this useState to filter the map display by bus route
+    const [busLocations, setBusLocations] = useState([]);  // array of objects holding real-time bus location data
+    const [showBuses, setShowBuses] = useState(false);     // used to toggle display of live buses
+    const [routeDialogVisible, displayRouteMenuPopup] = useState(false); // dictates whether the routes popup is visible or not
+    const [selectedRoute, setSelectedRoute] = useState(null); // used to filter the map display by bus route
+    const [favoriteRoutes, setFavoriteRoutes] = useState([]); // tracks user-favorited routes
 
-    const mapRef = useRef(null);
+    const mapRef = useRef(null); // reference to MapView instance for zooming actions
 
     // Prompts the user to turn on location services upon opening the app
     useEffect(() => {
         (async () => {
-            let { status } = await Location.requestPermissionsAsync(); // Request location on opening app
-            
-            if (status !== 'granted') {
-                // We shouldn't set the location beacon if info not available
-                return;
-            }
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') return;
 
             let location = await Location.getCurrentPositionAsync({});
             setUserLocation({
@@ -37,19 +47,29 @@ const HomeScreen = ({ navigation }) => {
                 longitude: location.coords.longitude,
             });
         })();
+
+        // Load favorites from storage
+        (async () => {
+            const storedFavorites = await AsyncStorage.getItem('favoriteRoutes');
+            if (storedFavorites) {
+                setFavoriteRoutes(JSON.parse(storedFavorites));
+            }
+        })();
     }, []);
+
+    useEffect(() => {
+        AsyncStorage.setItem('favoriteRoutes', JSON.stringify(favoriteRoutes));
+    }, [favoriteRoutes]);
 
     // Zooms to the user's location which is attained using the Google Maps API
     const zoomToUserLocation = () => {
-        // Check if user's location is on. If not, prompt to turn it on
         if (!userLocation) {
-            // Display warning message
             Alert.alert('Location Services Disabled',
                 'Please enable location services in your device settings.',
-                    [
-                        { text: 'Cancel', style: 'cancel' },
-                        { text: 'Open Settings', onPress: () => Linking.openSettings() },
-                    ]
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'Open Settings', onPress: () => Linking.openSettings() },
+                ]
             );
         } else if (mapRef.current) {
             mapRef.current.animateToRegion({
@@ -73,28 +93,33 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    // Function invoked when a user selects a bus route from the Bus Routes list menu. Needs to be completed!
+    // Function invoked when a user selects a bus route from the Bus Routes list menu
     const filterBusRoutes = (routeNumber) => {
         setSelectedRoute(routeNumber);
-        
-        // starter logic for filtering the bus route being displayed, update this when actually implementing this feature
         setBusLocations(prev =>
             prev.filter(bus => bus.routeNumber === routeNumber)
         );
         displayRouteMenuPopup(false);
     };
 
-    // All possible busses that are operating, could change the number to the actual bus ID for easy lookup
-    const busRouteNames = [
-        { number: 1, name: 'Campus Route' },
-        { number: 2, name: 'Blue Route' },
-        { number: 3, name: 'Loop Route' },
-        { number: 4, name: 'Apartmentland Express' },
-        { number: 5, name: 'Silver Route' },
-        { number: 6, name: 'Paradise Route' },
-        { number: 7, name: 'Wheat Route' },
-        { number: 8, name: 'Lentil Route' },
-      ];      
+    // Toggles a bus route as favorite or unfavorite when the star icon is clicked
+    const toggleFavorite = (routeNumber) => {
+        setFavoriteRoutes(prev =>
+            prev.includes(routeNumber)
+                ? prev.filter(r => r !== routeNumber)
+                : [...prev, routeNumber]
+        );
+    };
+
+    // Preserve original order; no sorting applied since only star feature was requested
+    // Sort bus routes to display favorites at the top of the list
+    // Sort bus routes to display favorites at the top of the list
+    const sortedRoutes = [...busRouteNames].sort((a, b) => {
+        const aFav = favoriteRoutes.includes(a.number);
+        
+        const bFav = favoriteRoutes.includes(b.number);
+        return aFav === bFav ? a.number - b.number : bFav - aFav;
+    });
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -113,77 +138,65 @@ const HomeScreen = ({ navigation }) => {
                     >
                         {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
                         {busLocations.map(bus => (
-                            // Marker label for static bus locations
                             <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
                         ))}
                     </MapView>
-                    
+
                     <View style={styles.menuContainer}>
                         <Menu
-                            visible={menuVisible}
-                            onDismiss={() => setMenuVisible(false)}
-                            anchor={
-                                <Button mode="contained" onPress={() => setMenuVisible(true)} style={{ backgroundColor: 'black', marginTop: 15 }}>
-                                    Menu
-                                </Button>
-                            }
-                            contentStyle={{ backgroundColor: 'black' }}
-                        >
-                            <Menu.Item onPress={zoomToUserLocation} title="Zoom to My Location" titleStyle={{ color: 'white' }} />
-                            <Divider />
-                            <Menu.Item onPress={zoomOnMap} title="View Map" titleStyle={{ color: 'white' }} />
-                            <Divider />
-                            <Menu.Item onPress={() => {
-                                setMenuVisible(false);
-                                displayRouteMenuPopup(true); // Display the menu of routes for the user to choose from
-                            }} title="View Bus Routes" titleStyle={{ color: 'white' }} />
-                            <Divider />
-                            <Menu.Item onPress={() => {
-                                setMenuVisible(false);
-                                navigation.navigate('Schedules');
-                            }} title="Schedules" titleStyle={{ color: 'white' }} />
-                            <Divider />
-                            <Menu.Item
-                            onPress={() => {
-                                setBusLocations([]); // Clear test data before receiving real data
-                                toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
-                            }}
-                            title={showBuses ? "Hide All Buses" : "Show All Buses"}
-                            titleStyle={{ color: 'white' }}
-                        />
-                        </Menu>
+    visible={menuVisible}
+    onDismiss={() => setMenuVisible(false)}
+    anchor={
+        <Button
+    mode="contained"
+    onPress={() => setMenuVisible(true)}
+    style={{ backgroundColor: menuVisible ? 'white' : 'black', marginTop: 15 }}
+    labelStyle={{ color: menuVisible ? 'black' : 'white' }}
+>
+    Menu
+</Button>
+    }
+    contentStyle={{ backgroundColor: 'black' }}
+>
+    <Menu.Item onPress={zoomToUserLocation} title="Zoom to My Location" titleStyle={{ color: 'white' }} />
+    <Divider />
+    <Menu.Item onPress={zoomOnMap} title="View Map" titleStyle={{ color: 'white' }} />
+    <Divider />
+    <Menu.Item onPress={() => {
+        setMenuVisible(false);
+        displayRouteMenuPopup(true);
+    }} title="View Bus Routes" titleStyle={{ color: 'white' }} />
+    <Divider />
+    <Menu.Item onPress={() => {
+        setMenuVisible(false);
+        navigation.navigate('Schedules');
+    }} title="Schedules" titleStyle={{ color: 'white' }} />
+    <Divider />
+    <Menu.Item onPress={() => {
+        setBusLocations([]);
+        toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
+    }} title={showBuses ? "Hide All Buses" : "Show All Buses"} titleStyle={{ color: 'white' }} />
+    <Divider />
+    <Menu.Item onPress={() => navigation.navigate('Favorites', { favoriteRoutes })} title="Favorites" titleStyle={{ color: 'white' }} />
+</Menu>
                     </View>
 
-                    {/* 
-                        Menu Popup for displaying all bus routes. After this feature, each bus route will be linked
-                        to a function that only displays that route and its corresponding busses.
-                    */}
                     <Portal>
                         <Dialog visible={routeDialogVisible} onDismiss={() => displayRouteMenuPopup(false)}>
-                            <Dialog.Title>Select a Bus Route</Dialog.Title>
-                            <Dialog.ScrollArea>
-                                <ScrollView contentContainerStyle={{ paddingHorizontal: 24 }}>
-                                    {busRouteNames.map((route) => (
-                                        <Button
-                                            key={route.number}
-                                            mode="outlined"
-                                            style={styles.routeButton}
-                                            labelStyle={{ color: 'black' }}
-                                            onPress={() => filterBusRoutes(route.number)}
-                                        >
-                                            {route.name}
-                                        </Button>
-                                    ))}
-                                </ScrollView>
-                            </Dialog.ScrollArea>
-                            <Dialog.Actions>
-                                <Button 
-                                labelStyle={{ color: 'black' }}
-                                onPress={() => displayRouteMenuPopup(false)}
-                                    >
-                                        Close
-                                </Button>
-                            </Dialog.Actions>
+                            <Dialog.Title>Select a Route</Dialog.Title>
+                            <Dialog.Content>
+                                {sortedRoutes.map(route => (
+                                    <View key={route.number} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 4 }}>
+                                        <Button onPress={() => filterBusRoutes(route.number)}>{route.name}</Button>
+                                        <IconButton
+                                            icon={favoriteRoutes.includes(route.number) ? 'star' : 'star-outline'}
+                                            size={20}
+                                            iconColor={favoriteRoutes.includes(route.number) ? 'gold' : 'gray'}
+                                            onPress={() => toggleFavorite(route.number)}
+                                        />
+                                    </View>
+                                ))}
+                            </Dialog.Content>
                         </Dialog>
                     </Portal>
                 </View>
@@ -192,25 +205,41 @@ const HomeScreen = ({ navigation }) => {
     );
 };
 
-// Main app function. The navigator switches between the listed Stack.Screen objects
+const FavoritesScreen = ({ route }) => {
+    const { favoriteRoutes } = route.params;
+    const favorites = busRouteNames.filter(r => favoriteRoutes.includes(r.number));
+    return (
+        <ScrollView contentContainerStyle={{ padding: 20 }}>
+            <Text variant="titleLarge">Favorite Routes</Text>
+            {favorites.length === 0 ? (
+                <Text style={{ marginTop: 10 }}>No favorite routes selected.</Text>
+            ) : (
+                favorites.map(route => (
+                    <Text key={route.number} style={{ marginTop: 10 }}>{route.name}</Text>
+                ))
+            )}
+        </ScrollView>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: { flex: 1 },
+    map: { flex: 1 },
+    menuContainer: {
+        position: 'absolute',
+        top: 20,
+        right: 10,
+    },
+});
+
 export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Pullman Transit Bus Buddy' }} />
-                <Stack.Screen name="Schedules" component={SchedulesScreen} options={{ title: 'Schedules' }} />
+                <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Pullman Transit Bus App' }} />
+                <Stack.Screen name="Schedules" component={SchedulesScreen} />
+                <Stack.Screen name="Favorites" component={FavoritesScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
 }
-
-// Style parameters for the map, menu button/container, and buttons for each of the bus routes in the filtering 
-// feature
-const styles = StyleSheet.create({
-    container: { flex: 1 },
-    map: { width: '100%', height: '100%' },
-    menuContainer: { position: 'absolute', top: 40, right: 20 },
-    routeButton: {
-        marginVertical: 6,
-    },
-});
