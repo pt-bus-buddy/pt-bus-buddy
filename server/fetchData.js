@@ -41,11 +41,15 @@ export async function fetchAllDatasets() {
   const alertsMessage = message.decode(alertsArray);
 
   // print it out for debugging purposes
+  /*
   console.log("Position Message: ");
   console.log(util.inspect(positionMessage, { depth: null, colors: true }));
+  */
   /*
   console.log("Real Time Message: ");
   console.log(util.inspect(realTimeMessage, { depth: null, colors: true }));
+  */
+  /*
   console.log("Alerts Message: ");
   console.log(util.inspect(alertsMessage, { depth: null, colors: true }));
   */
