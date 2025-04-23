@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://192.168.x.x:3000"); // Replace with dynamic IP setup in production
+const socket = io("http://192.168.83.231:3000"); // Replace with dynamic IP setup in production
 
 const toggleBusLocations = (showBuses, setShowBuses, setBusLocations, setMenuVisible, selectedRoute) => {
     if (showBuses) {
