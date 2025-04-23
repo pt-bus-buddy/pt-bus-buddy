@@ -1,16 +1,21 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://192.168.254.15:3000"); // Currently using my IP, need a way to have everyone connect
+const socket = io("http://192.168.x.x:3000"); // Replace with dynamic IP setup in production
 
-const toggleBusLocations = (showBuses, setShowBuses, setBusLocations, setMenuVisible) => {    
+const toggleBusLocations = (showBuses, setShowBuses, setBusLocations, setMenuVisible, selectedRoute) => {
     if (showBuses) {
-        setBusLocations([]); // Clear bus markers when toggled off
-        socket.off("busUpdate"); // Stop listening for updates
+        setBusLocations([]);
+        socket.off("busUpdate");
     } else {
         socket.on("busUpdate", (buses) => {
-            console.log("Received bus data:", buses);
-            setBusLocations(buses);
-          });
+            //console.log("Received bus data:", buses);
+            //console.log("Selected route: ", selectedRoute);
+            const filteredBuses = selectedRoute
+                ? buses.filter(bus => bus.id === selectedRoute.toString())
+                : buses;
+            setBusLocations(filteredBuses);
+            console.log("Showing: ", filteredBuses);
+        });
     }
 
     setShowBuses(!showBuses);
