@@ -5,16 +5,17 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
+import Papa from 'papaparse';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SchedulesScreen from './SchedulesScreen';
 import toggleBusLocations from './ShowBusToggle';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Papa from 'papaparse';
 
 const Stack = createStackNavigator();
 
+// All possible busses that are operating, could change the number to the actual bus ID for easy lookup
 const busRouteNames = [
     { number: 1, name: 'Campus Route' },
     { number: 2, name: 'Blue Route' },
@@ -26,7 +27,7 @@ const busRouteNames = [
     { number: 8, name: 'Lentil Route' },
 ];
 
-// TODO: Replace this with dynamic mapping later using trips.txt
+// route name ? shape_id
 const routeToShapeId = {
     'Campus Route': '25001',
     'Blue Route': '24999',
@@ -38,23 +39,18 @@ const routeToShapeId = {
     'Lentil Route': '26899',
 };
 
-async function loadShapeForRoute(routeName) {
+const loadShapeForRoute = async (routeName) => {
     try {
-        const asset = Asset.fromModule(require('./assets/shapes.txt'));
-        await asset.downloadAsync();
-        const fileUri = asset.localUri || asset.uri;
-        const fileContents = await FileSystem.readAsStringAsync(fileUri);
+        const [asset] = await Asset.loadAsync(require('./assets/shapes.txt'));
+        const uri = asset.localUri || asset.uri;
+        const text = await FileSystem.readAsStringAsync(uri);
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
 
-        const parsed = Papa.parse(fileContents, {
-            header: true,
-            skipEmptyLines: true,
-        });
-
-        const targetShapeId = routeToShapeId[routeName];
-        if (!targetShapeId) return [];
+        const shapeId = routeToShapeId[routeName];
+        if (!shapeId) return [];
 
         return parsed.data
-            .filter(row => row.shape_id === targetShapeId)
+            .filter(row => row.shape_id === shapeId)
             .sort((a, b) => Number(a.shape_pt_sequence) - Number(b.shape_pt_sequence))
             .map(row => ({
                 latitude: parseFloat(row.shape_pt_lat),
@@ -64,20 +60,21 @@ async function loadShapeForRoute(routeName) {
         console.error("Error loading shape data:", err);
         return [];
     }
-}
+};
 
 const HomeScreen = ({ navigation }) => {
-    const [userLocation, setUserLocation] = useState(null);
-    const [menuVisible, setMenuVisible] = useState(false);
-    const [busLocations, setBusLocations] = useState([]);
-    const [showBuses, setShowBuses] = useState(false);
-    const [routeDialogVisible, displayRouteMenuPopup] = useState(false);
-    const [selectedRoute, setSelectedRoute] = useState(null);
-    const [favoriteRoutes, setFavoriteRoutes] = useState([]);
-    const [routePolyline, setRoutePolyline] = useState([]);
+    const [userLocation, setUserLocation] = useState(null); // for User's location beacon
+    const [menuVisible, setMenuVisible] = useState(false); // state object for menu visibility
+    const [busLocations, setBusLocations] = useState([]);  // array of objects holding real-time bus location data
+    const [showBuses, setShowBuses] = useState(false);     // used to toggle display of live buses
+    const [routeDialogVisible, displayRouteMenuPopup] = useState(false); // dictates whether the routes popup is visible or not
+    const [selectedRoute, setSelectedRoute] = useState(null); // used to filter the map display by bus route
+    const [favoriteRoutes, setFavoriteRoutes] = useState([]); // tracks user-favorited routes
+    const [routePolyline, setRoutePolyline] = useState([]); // stores the shape data to render
 
-    const mapRef = useRef(null);
+    const mapRef = useRef(null); // reference to MapView instance for zooming actions
 
+    // Prompts the user to turn on location services upon opening the app
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
@@ -90,6 +87,7 @@ const HomeScreen = ({ navigation }) => {
             });
         })();
 
+        // Load favorites from storage
         (async () => {
             const storedFavorites = await AsyncStorage.getItem('favoriteRoutes');
             if (storedFavorites) {
@@ -102,16 +100,7 @@ const HomeScreen = ({ navigation }) => {
         AsyncStorage.setItem('favoriteRoutes', JSON.stringify(favoriteRoutes));
     }, [favoriteRoutes]);
 
-    const filterBusRoutes = async (routeNumber) => {
-        const selected = busRouteNames.find(r => r.number === routeNumber);
-        setSelectedRoute(routeNumber);
-        setBusLocations(prev => prev.filter(bus => bus.routeNumber === routeNumber));
-        displayRouteMenuPopup(false);
-
-        const shape = await loadShapeForRoute(selected.name);
-        setRoutePolyline(shape);
-    };
-
+    // Zooms to the user's location which is attained using the Google Maps API
     const zoomToUserLocation = () => {
         if (!userLocation) {
             Alert.alert('Location Services Disabled',
@@ -131,6 +120,7 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
+    // Zooms to the main Pullman area map where the bus routes are displayed
     const zoomOnMap = () => {
         if (mapRef.current) {
             mapRef.current.animateToRegion({
@@ -142,6 +132,20 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
+    // Function invoked when a user selects a bus route from the Bus Routes list menu
+    const filterBusRoutes = async (routeNumber) => {
+        const selected = busRouteNames.find(r => r.number === routeNumber);
+        setSelectedRoute(routeNumber);
+        setBusLocations(prev =>
+            prev.filter(bus => bus.routeNumber === routeNumber)
+        );
+        displayRouteMenuPopup(false);
+
+        const shape = await loadShapeForRoute(selected.name);
+        setRoutePolyline(shape);
+    };
+
+    // Toggles a bus route as favorite or unfavorite when the star icon is clicked
     const toggleFavorite = (routeNumber) => {
         setFavoriteRoutes(prev =>
             prev.includes(routeNumber)
@@ -150,6 +154,7 @@ const HomeScreen = ({ navigation }) => {
         );
     };
 
+    // Sort bus routes to display favorites at the top of the list
     const sortedRoutes = [...busRouteNames].sort((a, b) => {
         const aFav = favoriteRoutes.includes(a.number);
         const bFav = favoriteRoutes.includes(b.number);
@@ -173,14 +178,7 @@ const HomeScreen = ({ navigation }) => {
                     >
                         {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
                         {busLocations.map(bus => (
-                            <Marker
-                                key={bus.id}
-                                coordinate={{
-                                    latitude: bus.position.latitude,
-                                    longitude: bus.position.longitude
-                                }}
-                                title={`Bus ${bus.id}`}
-                            />
+                            <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
                         ))}
                         {routePolyline.length > 0 && (
                             <Polyline
