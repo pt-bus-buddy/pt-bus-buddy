@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, ScrollView, Alert, Linking } from 'react-native';
 import { Menu, Divider, Button, Provider, Dialog, Portal, Text, IconButton } from 'react-native-paper';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SchedulesScreen from './SchedulesScreen';
 import toggleBusLocations from './ShowBusToggle';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Papa from 'papaparse';
 
 const Stack = createStackNavigator();
 
-// All possible busses that are operating, could change the number to the actual bus ID for easy lookup
 const busRouteNames = [
     { number: 1, name: 'Campus Route' },
     { number: 2, name: 'Blue Route' },
@@ -24,18 +26,58 @@ const busRouteNames = [
     { number: 8, name: 'Lentil Route' },
 ];
 
+// TODO: Replace this with dynamic mapping later using trips.txt
+const routeToShapeId = {
+    'Campus Route': '25001',
+    'Blue Route': '24999',
+    'Loop Route': '26898',
+    'Apartmentland Express': '25000',
+    'Silver Route': '25489',
+    'Paradise Route': '25003',
+    'Wheat Route': '25213',
+    'Lentil Route': '26899',
+};
+
+async function loadShapeForRoute(routeName) {
+    try {
+        const asset = Asset.fromModule(require('./assets/shapes.txt'));
+        await asset.downloadAsync();
+        const fileUri = asset.localUri || asset.uri;
+        const fileContents = await FileSystem.readAsStringAsync(fileUri);
+
+        const parsed = Papa.parse(fileContents, {
+            header: true,
+            skipEmptyLines: true,
+        });
+
+        const targetShapeId = routeToShapeId[routeName];
+        if (!targetShapeId) return [];
+
+        return parsed.data
+            .filter(row => row.shape_id === targetShapeId)
+            .sort((a, b) => Number(a.shape_pt_sequence) - Number(b.shape_pt_sequence))
+            .map(row => ({
+                latitude: parseFloat(row.shape_pt_lat),
+                longitude: parseFloat(row.shape_pt_lon),
+            }));
+    } catch (err) {
+        console.error("Error loading shape data:", err);
+        return [];
+    }
+}
+
 const HomeScreen = ({ navigation }) => {
-    const [userLocation, setUserLocation] = useState(null); // for User's location beacon
-    const [menuVisible, setMenuVisible] = useState(false); // state object for menu visibility
-    const [busLocations, setBusLocations] = useState([]);  // array of objects holding real-time bus location data
-    const [showBuses, setShowBuses] = useState(false);     // used to toggle display of live buses
-    const [routeDialogVisible, displayRouteMenuPopup] = useState(false); // dictates whether the routes popup is visible or not
-    const [selectedRoute, setSelectedRoute] = useState(null); // used to filter the map display by bus route
-    const [favoriteRoutes, setFavoriteRoutes] = useState([]); // tracks user-favorited routes
+    const [userLocation, setUserLocation] = useState(null);
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [busLocations, setBusLocations] = useState([]);
+    const [showBuses, setShowBuses] = useState(false);
+    const [routeDialogVisible, displayRouteMenuPopup] = useState(false);
+    const [selectedRoute, setSelectedRoute] = useState(null);
+    const [favoriteRoutes, setFavoriteRoutes] = useState([]);
+    const [routePolyline, setRoutePolyline] = useState([]);
 
-    const mapRef = useRef(null); // reference to MapView instance for zooming actions
+    const mapRef = useRef(null);
 
-    // Prompts the user to turn on location services upon opening the app
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
@@ -48,7 +90,6 @@ const HomeScreen = ({ navigation }) => {
             });
         })();
 
-        // Load favorites from storage
         (async () => {
             const storedFavorites = await AsyncStorage.getItem('favoriteRoutes');
             if (storedFavorites) {
@@ -61,7 +102,16 @@ const HomeScreen = ({ navigation }) => {
         AsyncStorage.setItem('favoriteRoutes', JSON.stringify(favoriteRoutes));
     }, [favoriteRoutes]);
 
-    // Zooms to the user's location which is attained using the Google Maps API
+    const filterBusRoutes = async (routeNumber) => {
+        const selected = busRouteNames.find(r => r.number === routeNumber);
+        setSelectedRoute(routeNumber);
+        setBusLocations(prev => prev.filter(bus => bus.routeNumber === routeNumber));
+        displayRouteMenuPopup(false);
+
+        const shape = await loadShapeForRoute(selected.name);
+        setRoutePolyline(shape);
+    };
+
     const zoomToUserLocation = () => {
         if (!userLocation) {
             Alert.alert('Location Services Disabled',
@@ -81,7 +131,6 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    // Zooms to the main Pullman area map where the bus routes are displayed
     const zoomOnMap = () => {
         if (mapRef.current) {
             mapRef.current.animateToRegion({
@@ -93,16 +142,6 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    // Function invoked when a user selects a bus route from the Bus Routes list menu
-    const filterBusRoutes = (routeNumber) => {
-        setSelectedRoute(routeNumber);
-        setBusLocations(prev =>
-            prev.filter(bus => bus.routeNumber === routeNumber)
-        );
-        displayRouteMenuPopup(false);
-    };
-
-    // Toggles a bus route as favorite or unfavorite when the star icon is clicked
     const toggleFavorite = (routeNumber) => {
         setFavoriteRoutes(prev =>
             prev.includes(routeNumber)
@@ -111,12 +150,8 @@ const HomeScreen = ({ navigation }) => {
         );
     };
 
-    // Preserve original order; no sorting applied since only star feature was requested
-    // Sort bus routes to display favorites at the top of the list
-    // Sort bus routes to display favorites at the top of the list
     const sortedRoutes = [...busRouteNames].sort((a, b) => {
         const aFav = favoriteRoutes.includes(a.number);
-        
         const bFav = favoriteRoutes.includes(b.number);
         return aFav === bFav ? a.number - b.number : bFav - aFav;
     });
@@ -138,47 +173,61 @@ const HomeScreen = ({ navigation }) => {
                     >
                         {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
                         {busLocations.map(bus => (
-                            <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
+                            <Marker
+                                key={bus.id}
+                                coordinate={{
+                                    latitude: bus.position.latitude,
+                                    longitude: bus.position.longitude
+                                }}
+                                title={`Bus ${bus.id}`}
+                            />
                         ))}
+                        {routePolyline.length > 0 && (
+                            <Polyline
+                                coordinates={routePolyline}
+                                strokeColor="blue"
+                                strokeWidth={4}
+                            />
+                        )}
                     </MapView>
 
                     <View style={styles.menuContainer}>
                         <Menu
-    visible={menuVisible}
-    onDismiss={() => setMenuVisible(false)}
-    anchor={
-        <Button
-    mode="contained"
-    onPress={() => setMenuVisible(true)}
-    style={{ backgroundColor: menuVisible ? 'white' : 'black', marginTop: 15 }}
-    labelStyle={{ color: menuVisible ? 'black' : 'white' }}
->
-    Menu
-</Button>
-    }
-    contentStyle={{ backgroundColor: 'black' }}
->
-    <Menu.Item onPress={zoomToUserLocation} title="Zoom to My Location" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={zoomOnMap} title="View Map" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => {
-        setMenuVisible(false);
-        displayRouteMenuPopup(true);
-    }} title="View Bus Routes" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => {
-        setMenuVisible(false);
-        navigation.navigate('Schedules');
-    }} title="Schedules" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => {
-        setBusLocations([]);
-        toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
-    }} title={showBuses ? "Hide All Buses" : "Show All Buses"} titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => navigation.navigate('Favorites', { favoriteRoutes })} title="Favorites" titleStyle={{ color: 'white' }} />
-</Menu>
+                            visible={menuVisible}
+                            onDismiss={() => setMenuVisible(false)}
+                            anchor={
+                                <Button
+                                    mode="contained"
+                                    onPress={() => setMenuVisible(true)}
+                                    style={{ backgroundColor: menuVisible ? 'white' : 'black', marginTop: 15 }}
+                                    labelStyle={{ color: menuVisible ? 'black' : 'white' }}
+                                >
+                                    Menu
+                                </Button>
+                            }
+                            contentStyle={{ backgroundColor: 'black' }}
+                        >
+                            <Menu.Item onPress={zoomToUserLocation} title="Zoom to My Location" titleStyle={{ color: 'white' }} />
+                            <Divider />
+                            <Menu.Item onPress={zoomOnMap} title="View Map" titleStyle={{ color: 'white' }} />
+                            <Divider />
+                            <Menu.Item onPress={() => {
+                                setMenuVisible(false);
+                                displayRouteMenuPopup(true);
+                            }} title="View Bus Routes" titleStyle={{ color: 'white' }} />
+                            <Divider />
+                            <Menu.Item onPress={() => {
+                                setMenuVisible(false);
+                                navigation.navigate('Schedules');
+                            }} title="Schedules" titleStyle={{ color: 'white' }} />
+                            <Divider />
+                            <Menu.Item onPress={() => {
+                                setBusLocations([]);
+                                toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
+                            }} title={showBuses ? "Hide All Buses" : "Show All Buses"} titleStyle={{ color: 'white' }} />
+                            <Divider />
+                            <Menu.Item onPress={() => navigation.navigate('Favorites', { favoriteRoutes })} title="Favorites" titleStyle={{ color: 'white' }} />
+                        </Menu>
                     </View>
 
                     <Portal>
