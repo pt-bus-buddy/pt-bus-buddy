@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ScrollView, Alert, Linking, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Alert, Linking, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import { Menu, Divider, Button, Provider, Dialog, Portal, Text, IconButton } from 'react-native-paper';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -155,12 +155,15 @@ const HomeScreen = ({ navigation }) => {
             {/* Conditional Overlay */}
             {inputFocused && (
                 <View style={styles.overlay}>
-                    <Text style={styles.title}>Suggestions:</Text>
+                    <Text style={styles.title}>Search Results:</Text>
                     <IconButton
                         icon="close"
                         size={30}
                         iconColor="white"
-                        onPress={() => setInputFocused(false)}
+                        onPress={() => {
+                            Keyboard.dismiss();
+                            setInputFocused(false);
+                        }}
                         style={styles.closeButton}
                     />
                 </View>
@@ -326,25 +329,30 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         position: 'absolute',
-        bottom: 50,
-        left: '10%',
-        width: '80%',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0, // Allows full usage of the screen for positioning
         alignItems: 'center',
-        justifyContent: 'center',
     },
     input: {
-        width: '100%',
         padding: 10,
         backgroundColor: 'black',
         borderRadius: 10,
         elevation: 5,
         color: 'white',
         fontSize: 16,
+        position: 'absolute',
+        bottom: 50,
+        left: '10%',
+        width: '80%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     expandedInput: {
         position: 'absolute',
         top: 20,
-        left: '10%',
+        left: '5%',
         width: '80%',
         padding: 10,
         backgroundColor: 'black',
@@ -364,9 +372,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
+        position: 'absolute',
+        top: 100,
+        left: '5%',
         color: 'white',
         fontSize: 18,
-        marginBottom: 20,
+
     },
     closeButton: {
         position: 'absolute',
