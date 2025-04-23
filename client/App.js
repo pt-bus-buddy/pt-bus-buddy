@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ScrollView, Alert, Linking, TextInput } from 'react-native';
+import { StyleSheet, View, ScrollView, Alert, Linking, TextInput, TouchableOpacity } from 'react-native';
 import { Menu, Divider, Button, Provider, Dialog, Portal, Text, IconButton } from 'react-native-paper';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -33,6 +33,7 @@ const HomeScreen = ({ navigation }) => {
     const [selectedRoute, setSelectedRoute] = useState(null); // used to filter the map display by bus route
     const [favoriteRoutes, setFavoriteRoutes] = useState([]); // tracks user-favorited routes
     const [destination, setDestination] = useState(''); //stores destination user types in
+    const [inputFocused, setInputFocused] = useState(false); // Track if TextInput is focused
 
     const mapRef = useRef(null); // reference to MapView instance for zooming actions
 
@@ -125,97 +126,175 @@ const HomeScreen = ({ navigation }) => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Provider>
-                <View style={styles.container}>
-                    <MapView
-                        ref={mapRef}
-                        style={styles.map}
-                        initialRegion={{
-                            latitude: 46.7300,
-                            longitude: -117.1740,
-                            latitudeDelta: 0.065,
-                            longitudeDelta: 0.04,
+        <View style={styles.container}>
+            {/* MapView */}
+            <MapView
+                ref={mapRef}
+                style={styles.map}
+                initialRegion={{
+                    latitude: 46.7300,
+                    longitude: -117.1740,
+                    latitudeDelta: 0.065,
+                    longitudeDelta: 0.04,
+                }}
+                showsUserLocation={true}
+            >
+                {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
+                {busLocations.map(bus => (
+                    <Marker
+                        key={bus.id}
+                        coordinate={{
+                            latitude: bus.position.latitude,
+                            longitude: bus.position.longitude,
                         }}
-                        showsUserLocation={true}
-                    >
-                        {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
-                        {busLocations.map(bus => (
-                            <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
-                        ))}
-                    </MapView>
+                        title={`Bus ${bus.id}`}
+                    />
+                ))}
+            </MapView>
 
-{/* Destination Input */}
-<View style={styles.inputContainer}>
+            {/* Conditional Overlay */}
+            {inputFocused && (
+                <View style={styles.overlay}>
+                    <Text style={styles.title}>Suggestions:</Text>
+                    <IconButton
+                        icon="close"
+                        size={30}
+                        iconColor="white"
+                        onPress={() => setInputFocused(false)}
+                        style={styles.closeButton}
+                    />
+                </View>
+            )}
+
+            {/* Destination Input */}
+            <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.input}
-                    placeholder="Enter your destination"
+                    style={inputFocused ? styles.expandedInput : styles.input}
+                    placeholder="Where To?"
+                    placeholderTextColor="white"
                     value={destination}
                     onChangeText={(text) => setDestination(text)}
+                    onFocus={() => setInputFocused(true)}
                 />
             </View>
-            
 
-
-                    <View style={styles.menuContainer}>
-                        <Menu
-    visible={menuVisible}
-    onDismiss={() => setMenuVisible(false)}
-    anchor={
-        <Button
-    mode="contained"
-    onPress={() => setMenuVisible(true)}
-    style={{ backgroundColor: menuVisible ? 'white' : 'black', marginTop: 15 }}
-    labelStyle={{ color: menuVisible ? 'black' : 'white' }}
->
-    Menu
-</Button>
-    }
-    contentStyle={{ backgroundColor: 'black' }}
->
-    <Menu.Item onPress={zoomToUserLocation} title="Zoom to My Location" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={zoomOnMap} title="View Map" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => {
-        setMenuVisible(false);
-        displayRouteMenuPopup(true);
-    }} title="View Bus Routes" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => {
-        setMenuVisible(false);
-        navigation.navigate('Schedules');
-    }} title="Schedules" titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => {
-        setBusLocations([]);
-        toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible);
-    }} title={showBuses ? "Hide All Buses" : "Show All Buses"} titleStyle={{ color: 'white' }} />
-    <Divider />
-    <Menu.Item onPress={() => navigation.navigate('Favorites', { favoriteRoutes })} title="Favorites" titleStyle={{ color: 'white' }} />
-</Menu>
+            {/* Menu */}
+            {!inputFocused && (
+                <View style={styles.menuContainer}>
+                    <Menu
+                        visible={menuVisible}
+                        onDismiss={() => setMenuVisible(false)}
+                        anchor={
+                            <Button
+                                mode="contained"
+                                onPress={() => setMenuVisible(true)}
+                                style={{
+                                    backgroundColor: menuVisible ? 'white' : 'black',
+                                    marginTop: 15,
+                                }}
+                                labelStyle={{
+                                    color: menuVisible ? 'black' : 'white',
+                                }}
+                            >
+                                Menu
+                            </Button>
+                        }
+                        contentStyle={{ backgroundColor: 'black' }}
+                    >
+                        <Menu.Item
+                            onPress={zoomToUserLocation}
+                            title="Zoom to My Location"
+                            titleStyle={{ color: 'white' }}
+                        />
+                        <Divider />
+                        <Menu.Item
+                            onPress={zoomOnMap}
+                            title="View Map"
+                            titleStyle={{ color: 'white' }}
+                        />
+                        <Divider />
+                        <Menu.Item
+                            onPress={() => {
+                                setMenuVisible(false);
+                                displayRouteMenuPopup(true);
+                            }}
+                            title="View Bus Routes"
+                            titleStyle={{ color: 'white' }}
+                        />
+                        <Divider />
+                        <Menu.Item
+                            onPress={() => {
+                                setMenuVisible(false);
+                                navigation.navigate('Schedules');
+                            }}
+                            title="Schedules"
+                            titleStyle={{ color: 'white' }}
+                        />
+                        <Divider />
+                        <Menu.Item
+                            onPress={() => {
+                                setBusLocations([]);
+                                toggleBusLocations(
+                                    showBuses,
+                                    setShowBuses,
+                                    setBusLocations,
+                                    setMenuVisible
+                                );
+                            }}
+                            title={showBuses ? 'Hide All Buses' : 'Show All Buses'}
+                            titleStyle={{ color: 'white' }}
+                        />
+                        <Divider />
+                        <Menu.Item
+                            onPress={() =>
+                                navigation.navigate('Favorites', { favoriteRoutes })
+                            }
+                            title="Favorites"
+                            titleStyle={{ color: 'white' }}
+                        />
+                    </Menu>
                 </View>
-                    <Portal>
-                        <Dialog visible={routeDialogVisible} onDismiss={() => displayRouteMenuPopup(false)}>
-                            <Dialog.Title>Select a Route</Dialog.Title>
-                            <Dialog.Content>
-                                {sortedRoutes.map(route => (
-                                    <View key={route.number} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 4 }}>
-                                        <Button onPress={() => filterBusRoutes(route.number)}>{route.name}</Button>
-                                        <IconButton
-                                            icon={favoriteRoutes.includes(route.number) ? 'star' : 'star-outline'}
-                                            size={20}
-                                            iconColor={favoriteRoutes.includes(route.number) ? 'gold' : 'gray'}
-                                            onPress={() => toggleFavorite(route.number)}
-                                        />
-                                    </View>
-                                ))}
-                            </Dialog.Content>
-                        </Dialog>
-                    </Portal>
-                </View>
+            )}
 
-
-
-            </Provider>
+            {/* Portal for Dialog */}
+            <Portal>
+                <Dialog
+                    visible={routeDialogVisible}
+                    onDismiss={() => displayRouteMenuPopup(false)}
+                >
+                    <Dialog.Title>Select a Route</Dialog.Title>
+                    <Dialog.Content>
+                        {sortedRoutes.map((route) => (
+                            <View
+                                key={route.number}
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    marginVertical: 4,
+                                }}
+                            >
+                                <Button onPress={() => filterBusRoutes(route.number)}>
+                                    {route.name}
+                                </Button>
+                                <IconButton
+                                    icon={
+                                        favoriteRoutes.includes(route.number)
+                                            ? 'star'
+                                            : 'star-outline'
+                                    }
+                                    size={20}
+                                    iconColor={
+                                        favoriteRoutes.includes(route.number) ? 'gold' : 'gray'
+                                    }
+                                    onPress={() => toggleFavorite(route.number)}
+                                />
+                            </View>
+                        ))}
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
+        </View>
+    </Provider>
         </GestureHandlerRootView>
     );
 };
@@ -247,7 +326,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         position: 'absolute',
-        bottom: 20,
+        bottom: 50,
         left: '10%',
         width: '80%',
         alignItems: 'center',
@@ -256,9 +335,44 @@ const styles = StyleSheet.create({
     input: {
         width: '100%',
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: 'black',
         borderRadius: 10,
         elevation: 5,
+        color: 'white',
+        fontSize: 16,
+    },
+    expandedInput: {
+        position: 'absolute',
+        top: 20,
+        left: '10%',
+        width: '80%',
+        padding: 10,
+        backgroundColor: 'black',
+        borderRadius: 10,
+        elevation: 5,
+        color: 'white',
+        fontSize: 16,
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Semi-transparent black overlay
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        color: 'white',
+        fontSize: 18,
+        marginBottom: 20,
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10, // Position the button at the top-right corner
+        zIndex: 10,
     },
 });
 
