@@ -15,16 +15,17 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
-// All possible busses that are operating, could change the number to the actual bus ID for easy lookup
+// All possible busses that are operating, using bus id as number
 const busRouteNames = [
-    { number: 1, name: 'Campus Route' },
+    { number: 1, name: 'Campus Route' }, // Currently only have Wheat and Lentil ids, get the rest later
     { number: 2, name: 'Blue Route' },
     { number: 3, name: 'Loop Route' },
     { number: 4, name: 'Apartmentland Express' },
     { number: 5, name: 'Silver Route' },
     { number: 6, name: 'Paradise Route' },
-    { number: 7, name: 'Wheat Route' },
-    { number: 8, name: 'Lentil Route' },
+    { number: 3475, name: 'Wheat Route' },
+    { number: 3471, name: 'Lentil Route' },
+    { number: 0, name: 'Reset Filter'}, // Sets selected buses back to null so all buses can be shown again
 ];
 
 // route name ? shape_id
@@ -278,65 +279,33 @@ const HomeScreen = ({ navigation }) => {
                         <Menu.Item
                             onPress={() => {
                                 setBusLocations([]);
-                                toggleBusLocations(
-                                    showBuses,
-                                    setShowBuses,
-                                    setBusLocations,
-                                    setMenuVisible
-                                );
-                            }}
-                            title={showBuses ? 'Hide All Buses' : 'Show All Buses'}
-                            titleStyle={{ color: 'white' }}
-                        />
-                        <Divider />
-                        <Menu.Item
-                            onPress={() =>
-                                navigation.navigate('Favorites', { favoriteRoutes })
-                            }
-                            title="Favorites"
-                            titleStyle={{ color: 'white' }}
-                        />
-                    </Menu>
-                </View>
+                                toggleBusLocations(showBuses, setShowBuses, setBusLocations, setMenuVisible, selectedRoute);
+                            }} title={showBuses ? "Hide All Buses" : "Show All Buses"} titleStyle={{ color: 'white' }} />
+                            <Divider />
+                            <Menu.Item onPress={() => navigation.navigate('Favorites', { favoriteRoutes })} title="Favorites" titleStyle={{ color: 'white' }} />
+                        </Menu>
+                    </View>
             )}
-
-            {/* Portal for Dialog */}
-            <Portal>
-                <Dialog
-                    visible={routeDialogVisible}
-                    onDismiss={() => displayRouteMenuPopup(false)}
-                >
-                    <Dialog.Title>Select a Route</Dialog.Title>
-                    <Dialog.Content>
-                        {sortedRoutes.map((route) => (
-                            <View
-                                key={route.number}
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    marginVertical: 4,
-                                }}
-                            >
-                                <Button onPress={() => filterBusRoutes(route.number)}>
-                                    {route.name}
-                                </Button>
-                                <IconButton
-                                    icon={
-                                        favoriteRoutes.includes(route.number)
-                                            ? 'star'
-                                            : 'star-outline'
-                                    }
-                                    size={20}
-                                    iconColor={
-                                        favoriteRoutes.includes(route.number) ? 'gold' : 'gray'
-                                    }
-                                    onPress={() => toggleFavorite(route.number)}
-                                />
-                            </View>
-                        ))}
-                    </Dialog.Content>
-                </Dialog>
-            </Portal>
+                    <Portal>
+                        <Dialog visible={routeDialogVisible} onDismiss={() => displayRouteMenuPopup(false)}>
+                            <Dialog.Title>Select a Route</Dialog.Title>
+                            <Dialog.Content>
+                                {sortedRoutes.map(route => (
+                                    <View key={route.number} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 4 }}>
+                                        <Button onPress={() => filterBusRoutes(route.number)}>{route.name}</Button>
+                                        {route.number != 0 && (
+                                            <IconButton
+                                                icon={favoriteRoutes.includes(route.number) ? 'star' : 'star-outline'}
+                                                size={20}
+                                                iconColor={favoriteRoutes.includes(route.number) ? 'gold' : 'gray'}
+                                                onPress={() => toggleFavorite(route.number)}
+                                        />)}
+                                    </View>
+                                ))}
+                            </Dialog.Content>
+                        </Dialog>
+                    </Portal>
+                
         </View>
     </Provider>
         </GestureHandlerRootView>
