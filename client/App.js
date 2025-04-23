@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ScrollView, Alert, Linking } from 'react-native';
+import { StyleSheet, View, ScrollView, Alert, Linking, TextInput } from 'react-native';
 import { Menu, Divider, Button, Provider, Dialog, Portal, Text, IconButton } from 'react-native-paper';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -32,6 +32,7 @@ const HomeScreen = ({ navigation }) => {
     const [routeDialogVisible, displayRouteMenuPopup] = useState(false); // dictates whether the routes popup is visible or not
     const [selectedRoute, setSelectedRoute] = useState(null); // used to filter the map display by bus route
     const [favoriteRoutes, setFavoriteRoutes] = useState([]); // tracks user-favorited routes
+    const [destination, setDestination] = useState(''); //stores destination user types in
 
     const mapRef = useRef(null); // reference to MapView instance for zooming actions
 
@@ -142,6 +143,18 @@ const HomeScreen = ({ navigation }) => {
                         ))}
                     </MapView>
 
+{/* Destination Input */}
+<View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your destination"
+                    value={destination}
+                    onChangeText={(text) => setDestination(text)}
+                />
+            </View>
+            
+
+
                     <View style={styles.menuContainer}>
                         <Menu
     visible={menuVisible}
@@ -179,8 +192,7 @@ const HomeScreen = ({ navigation }) => {
     <Divider />
     <Menu.Item onPress={() => navigation.navigate('Favorites', { favoriteRoutes })} title="Favorites" titleStyle={{ color: 'white' }} />
 </Menu>
-                    </View>
-
+                </View>
                     <Portal>
                         <Dialog visible={routeDialogVisible} onDismiss={() => displayRouteMenuPopup(false)}>
                             <Dialog.Title>Select a Route</Dialog.Title>
@@ -200,6 +212,9 @@ const HomeScreen = ({ navigation }) => {
                         </Dialog>
                     </Portal>
                 </View>
+
+
+
             </Provider>
         </GestureHandlerRootView>
     );
@@ -229,6 +244,21 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 20,
         right: 10,
+    },
+    inputContainer: {
+        position: 'absolute',
+        bottom: 20,
+        left: '10%',
+        width: '80%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    input: {
+        width: '100%',
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        elevation: 5,
     },
 });
 
