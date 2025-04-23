@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, ScrollView, Alert, Linking, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import { Menu, Divider, Button, Provider, Dialog, Portal, Text, IconButton } from 'react-native-paper';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
+import Papa from 'papaparse';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -24,6 +27,41 @@ const busRouteNames = [
     { number: 8, name: 'Lentil Route' },
 ];
 
+// route name ? shape_id
+const routeToShapeId = {
+    'Campus Route': '25001',
+    'Blue Route': '24999',
+    'Loop Route': '26898',
+    'Apartmentland Express': '25000',
+    'Silver Route': '25489',
+    'Paradise Route': '25003',
+    'Wheat Route': '25213',
+    'Lentil Route': '26899',
+};
+
+const loadShapeForRoute = async (routeName) => {
+    try {
+        const [asset] = await Asset.loadAsync(require('./assets/shapes.txt'));
+        const uri = asset.localUri || asset.uri;
+        const text = await FileSystem.readAsStringAsync(uri);
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+
+        const shapeId = routeToShapeId[routeName];
+        if (!shapeId) return [];
+
+        return parsed.data
+            .filter(row => row.shape_id === shapeId)
+            .sort((a, b) => Number(a.shape_pt_sequence) - Number(b.shape_pt_sequence))
+            .map(row => ({
+                latitude: parseFloat(row.shape_pt_lat),
+                longitude: parseFloat(row.shape_pt_lon),
+            }));
+    } catch (err) {
+        console.error("Error loading shape data:", err);
+        return [];
+    }
+};
+
 const HomeScreen = ({ navigation }) => {
     const [userLocation, setUserLocation] = useState(null); // for User's location beacon
     const [menuVisible, setMenuVisible] = useState(false); // state object for menu visibility
@@ -34,6 +72,7 @@ const HomeScreen = ({ navigation }) => {
     const [favoriteRoutes, setFavoriteRoutes] = useState([]); // tracks user-favorited routes
     const [destination, setDestination] = useState(''); //stores destination user types in
     const [inputFocused, setInputFocused] = useState(false); // Track if TextInput is focused
+    const [routePolyline, setRoutePolyline] = useState([]); // stores the shape data to render
 
     const mapRef = useRef(null); // reference to MapView instance for zooming actions
 
@@ -96,12 +135,16 @@ const HomeScreen = ({ navigation }) => {
     };
 
     // Function invoked when a user selects a bus route from the Bus Routes list menu
-    const filterBusRoutes = (routeNumber) => {
+    const filterBusRoutes = async (routeNumber) => {
+        const selected = busRouteNames.find(r => r.number === routeNumber);
         setSelectedRoute(routeNumber);
         setBusLocations(prev =>
             prev.filter(bus => bus.routeNumber === routeNumber)
         );
         displayRouteMenuPopup(false);
+
+        const shape = await loadShapeForRoute(selected.name);
+        setRoutePolyline(shape);
     };
 
     // Toggles a bus route as favorite or unfavorite when the star icon is clicked
@@ -113,12 +156,9 @@ const HomeScreen = ({ navigation }) => {
         );
     };
 
-    // Preserve original order; no sorting applied since only star feature was requested
-    // Sort bus routes to display favorites at the top of the list
     // Sort bus routes to display favorites at the top of the list
     const sortedRoutes = [...busRouteNames].sort((a, b) => {
         const aFav = favoriteRoutes.includes(a.number);
-        
         const bFav = favoriteRoutes.includes(b.number);
         return aFav === bFav ? a.number - b.number : bFav - aFav;
     });
