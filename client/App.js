@@ -163,6 +163,7 @@ const HomeScreen = ({ navigation }) => {
                         onPress={() => {
                             Keyboard.dismiss();
                             setInputFocused(false);
+                            setDestination('');
                         }}
                         style={styles.closeButton}
                     />
