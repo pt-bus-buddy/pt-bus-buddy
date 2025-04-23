@@ -17,15 +17,16 @@ const Stack = createStackNavigator();
 
 // All possible busses that are operating, using bus id as number
 const busRouteNames = [
-  { number: 1, name: 'Campus Route' }, // Currently only have Wheat and Lentil ids, get the rest later
-  { number: 2, name: 'Blue Route' },
-  { number: 3, name: 'Loop Route' },
-  { number: 4, name: 'Apartmentland Express' },
-  { number: 5, name: 'Silver Route' },
-  { number: 6, name: 'Paradise Route' },
-  { number: 3475, name: 'Wheat Route' },
-  { number: 3471, name: 'Lentil Route' },
-  { number: 0, name: 'Reset Filter' }, // Sets selected buses back to null so all buses can be shown again
+
+    { number: 3467, name: 'Campus Route' }, // Currently only have Wheat and Lentil ids, get the rest later
+    { number: 8081, name: 'Blue Route' },
+    { number: 4727, name: 'Loop Route' },
+    { number: 3479, name: 'Apartmentland Express' },
+    { number: 3477, name: 'Silver Route' },
+    { number: 3466, name: 'Paradise Route' },
+    { number: 3475, name: 'Wheat Route' },
+    { number: 3471, name: 'Lentil Route' },
+    { number: 0, name: 'Reset Filter'}, // Sets selected buses back to null so all buses can be shown again
 ];
 
 // route name ? shape_id
