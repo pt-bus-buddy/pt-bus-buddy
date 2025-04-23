@@ -169,30 +169,29 @@ const HomeScreen = ({ navigation }) => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider>
         <View style={styles.container}>
-          {/* MapView */}
-          <MapView
-            ref={mapRef}
-            style={styles.map}
-            initialRegion={{
-              latitude: 46.7300,
-              longitude: -117.1740,
-              latitudeDelta: 0.065,
-              longitudeDelta: 0.04,
-            }}
-            showsUserLocation={true}
-          >
-            {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
-            {busLocations.map(bus => (
-              <Marker
-                key={bus.id}
-                coordinate={{
-                  latitude: bus.position.latitude,
-                  longitude: bus.position.longitude,
-                }}
-                title={`Bus ${bus.id}`}
-              />
-            ))}
-          </MapView>
+        <MapView
+                        ref={mapRef}
+                        style={styles.map}
+                        initialRegion={{
+                            latitude: 46.7300,
+                            longitude: -117.1740,
+                            latitudeDelta: 0.065,
+                            longitudeDelta: 0.04,
+                        }}
+                        showsUserLocation={true}
+                    >
+                        {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
+                        {busLocations.map(bus => (
+                            <Marker key={bus.id} coordinate={{ latitude: bus.position.latitude, longitude: bus.position.longitude }} title={`Bus ${bus.id}`} />
+                        ))}
+                        {routePolyline.length > 0 && (
+                            <Polyline
+                                coordinates={routePolyline}
+                                strokeColor="blue"
+                                strokeWidth={4}
+                            />
+                        )}
+                    </MapView>
 
           {/* Conditional Overlay */}
           {inputFocused && (
